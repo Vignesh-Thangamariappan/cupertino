@@ -29,6 +29,7 @@ let macOSOnlyProducts: [Product] = [
     .singleTargetLibrary("Core"),
     .singleTargetLibrary("Cleanup"),
     .singleTargetLibrary("Search"),
+    .singleTargetLibrary("SearchRanking"),
     .singleTargetLibrary("SampleIndex"),
     .singleTargetLibrary("Services"),
     .singleTargetLibrary("Distribution"),
@@ -315,11 +316,20 @@ let targets: [Target] = {
         // the Strategies/ folder moves to Sources/SearchStrategies/ and gets its own
         // SPM target with deps: [SearchIndexCore, CoreJSONParser, CorePackageIndexing,
         // Core, SharedModels, SharedConstants, Resources, Logging].
-        dependencies: ["SearchModels", "SharedCore", "SharedConstants", "SharedModels", "Logging", "CoreProtocols", "CoreJSONParser", "CorePackageIndexing", "Core", "ASTIndexer"]
+        dependencies: ["SearchModels", "SharedCore", "SharedConstants", "SharedModels", "Logging", "CoreProtocols", "CoreJSONParser", "CorePackageIndexing", "Core", "ASTIndexer", "SearchRanking"]
     )
     let searchTestsTarget = Target.testTarget(
         name: "SearchTests",
         dependencies: ["Search", "SearchModels", "SharedCore", "SharedConstants", "SharedModels", "SharedUtils", "TestSupport", "CorePackageIndexing", "ASTIndexer", "SampleIndex"]
+    )
+
+    let searchRankingTarget = Target.target(
+        name: "SearchRanking",
+        dependencies: ["SharedCore", "SharedConstants", "SharedModels", "Logging"]
+    )
+    let searchRankingTestsTarget = Target.testTarget(
+        name: "SearchRankingTests",
+        dependencies: ["SearchRanking", "TestSupport"]
     )
 
     let sampleIndexTarget = Target.target(
@@ -593,6 +603,8 @@ let targets: [Target] = {
         searchModelsTestsTarget,
         searchTarget,
         searchTestsTarget,
+        searchRankingTarget,
+        searchRankingTestsTarget,
         sampleIndexTarget,
         sampleIndexTestsTarget,
         servicesTarget,
