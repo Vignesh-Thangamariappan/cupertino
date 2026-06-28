@@ -86,6 +86,7 @@ let macOSOnlyProducts: [Product] = [
     .singleTargetLibrary("Availability"),
     .singleTargetLibrary("AvailabilityFoundationNetworking"),
     .singleTargetLibrary("CrawlerWebKit"),
+    .singleTargetLibrary("CrawlerSosumi"),
     .singleTargetLibrary("CoreJSONParserWebKit"),
     .singleTargetLibrary("CoreSampleCodeWebKit"),
     .singleTargetLibrary("ASTIndexer"),
@@ -491,6 +492,27 @@ let targets: [Target] = {
             "CrawlerModels",
             "CoreProtocols",
             "SharedConstants",
+        ]
+    )
+    // CrawlerSosumi sibling target carrying the URLSession-backed
+    // Markdown transport for Sosumi's HTTP API. The concrete conforms to
+    // the same `Crawler.HTTPFetcherFactory` seam as CrawlerWebKit, so
+    // CLI can opt into it without the Crawler producer learning about
+    // URLSession or hosted service details.
+    let crawlerSosumiTarget = Target.target(
+        name: "CrawlerSosumi",
+        dependencies: [
+            "CrawlerModels",
+            "CoreProtocols",
+        ]
+    )
+    let crawlerSosumiTestsTarget = Target.testTarget(
+        name: "CrawlerSosumiTests",
+        dependencies: [
+            "CrawlerSosumi",
+            "CoreProtocols",
+            "CrawlerModels",
+            "TestSupport",
         ]
     )
     // #536 lift 4: the shared web-crawl engine (`WebCrawlFetchStrategy` +
@@ -1318,6 +1340,7 @@ let targets: [Target] = {
             "SharedConstants",
             "CoreProtocols", "CoreJSONParser", "CoreJSONParserWebKit", "CorePackageIndexing", "CorePackageIndexingModels", "Core", "CoreSampleCode", "CoreSampleCodeWebKit",
             "CrawlerWebKit",
+            "CrawlerSosumi",
             "Cleanup",
             "SearchAPI",
             "SearchSQLite",
@@ -1483,7 +1506,7 @@ let targets: [Target] = {
         dependencies: [
             "CLI",
             "CoreProtocols", "CorePackageIndexing", "CoreJSONParser", "Core",
-            "CrawlerModels", "CrawlerWebKit",
+            "CrawlerModels", "CrawlerWebKit", "CrawlerSosumi",
             // #536 lift 4: Crawler.AppleDocs / Ingest.Session engine moved
             // from the per-source targets into the Crawler producer.
             "Crawler",
@@ -1624,6 +1647,8 @@ let targets: [Target] = {
         crawlerModelsTarget,
         crawlerModelsTestsTarget,
         crawlerWebKitTarget,
+        crawlerSosumiTarget,
+        crawlerSosumiTestsTarget,
         crawlerTarget,
         crawlerTestsTarget,
         cleanupModelsTarget,

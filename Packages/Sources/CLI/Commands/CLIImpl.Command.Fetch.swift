@@ -10,6 +10,7 @@ import CoreSampleCode
 import CoreSampleCodeModels
 import CoreSampleCodeWebKit
 import CrawlerModels
+import CrawlerSosumi
 import CrawlerWebKit
 import CupertinoComposition
 import Foundation
@@ -109,6 +110,15 @@ extension CLIImpl.Command {
 
         @Option(name: .long, help: "Output directory for documentation")
         var outputDir: String?
+
+        @Option(
+            name: .long,
+            help: """
+            Base URL for the Sosumi HTTP API (for example https://sosumi.ai or a self-hosted instance). \
+            When set, web-crawl sources use rendered Markdown responses instead of the WKWebView fetcher.
+            """
+        )
+        var sosumiBaseURL: String?
 
         @Option(
             name: .long,
@@ -315,7 +325,7 @@ extension CLIImpl.Command {
             }
             let outputURL = try await resolveFetchOutputURL(for: entry.provider)
             try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true)
-            let env = await MainActor.run { makeFetchEnvironment(outputDirectory: outputURL) }
+            let env = try await MainActor.run { try makeFetchEnvironment(outputDirectory: outputURL) }
             try await strategy.run(env: env)
         }
 
@@ -372,10 +382,10 @@ extension CLIImpl.Command {
         /// dispatch site; the strategy concretes pick out the fields
         /// they need and ignore the rest.
         @MainActor
-        private func makeFetchEnvironment(outputDirectory: URL) -> SearchModels.Search.FetchEnvironment {
+        private func makeFetchEnvironment(outputDirectory: URL) throws -> SearchModels.Search.FetchEnvironment {
             let recording: any LoggingModels.Logging.Recording =
                 Cupertino.Context.composition.logging.recording
-            return SearchModels.Search.FetchEnvironment(
+            return try SearchModels.Search.FetchEnvironment(
                 outputDirectory: outputDirectory,
                 maxPages: maxPages,
                 maxDepth: maxDepth,
@@ -404,11 +414,29 @@ extension CLIImpl.Command {
                 refresh: refresh,
                 fast: fast,
                 logger: recording,
-                httpFetcherFactory: Crawler.WebKit.LiveHTTPFetcherFactory(),
+                httpFetcherFactory: makeHTTPFetcherFactory(),
                 htmlParser: LiveHTMLParserStrategy(),
                 appleJSONParser: LiveAppleJSONParserStrategy(),
+                markdownParser: LiveMarkdownParserStrategy(),
                 priorityPackageStrategy: LivePriorityPackageStrategy()
             )
+        }
+
+        @MainActor
+        private func makeHTTPFetcherFactory() throws -> any Crawler.HTTPFetcherFactory {
+            guard let rawBaseURL = sosumiBaseURL else {
+                return Crawler.WebKit.LiveHTTPFetcherFactory()
+            }
+
+            guard let baseURL = URL(string: rawBaseURL),
+                  let scheme = baseURL.scheme?.lowercased(),
+                  scheme == "http" || scheme == "https",
+                  baseURL.host != nil
+            else {
+                throw ValidationError("Invalid --sosumi-base-url '\(rawBaseURL)'. Use an absolute http(s) URL.")
+            }
+
+            return Crawler.Sosumi.LiveHTTPFetcherFactory(baseURL: baseURL)
         }
 
         private func logStartMessage() {

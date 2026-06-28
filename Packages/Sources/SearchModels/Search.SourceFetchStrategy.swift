@@ -87,6 +87,10 @@ extension Search {
         public let htmlParser: any Crawler.HTMLParserStrategy
         /// GoF Strategy seam for Apple-DocC JSON → markdown.
         public let appleJSONParser: any Crawler.AppleJSONParserStrategy
+        /// GoF Strategy seam for rendered Markdown → structured page.
+        /// Used by Markdown-returning crawler transports; web crawls
+        /// that only see HTML / Apple JSON can ignore it.
+        public let markdownParser: any Crawler.MarkdownParserStrategy
         /// GoF Strategy seam for package priority-catalog generation.
         public let priorityPackageStrategy: any Crawler.PriorityPackageStrategy
 
@@ -115,6 +119,7 @@ extension Search {
             httpFetcherFactory: any Crawler.HTTPFetcherFactory,
             htmlParser: any Crawler.HTMLParserStrategy,
             appleJSONParser: any Crawler.AppleJSONParserStrategy,
+            markdownParser: any Crawler.MarkdownParserStrategy = Crawler.NoopMarkdownParserStrategy(),
             priorityPackageStrategy: any Crawler.PriorityPackageStrategy
         ) {
             self.outputDirectory = outputDirectory
@@ -141,6 +146,7 @@ extension Search {
             self.httpFetcherFactory = httpFetcherFactory
             self.htmlParser = htmlParser
             self.appleJSONParser = appleJSONParser
+            self.markdownParser = markdownParser
             self.priorityPackageStrategy = priorityPackageStrategy
         }
     }

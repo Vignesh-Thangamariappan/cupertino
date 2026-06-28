@@ -12,7 +12,7 @@ cupertino fetch [--source <id>] [options]
 
 The `fetch` command is the unified fetching command that handles both web crawling and direct downloads:
 
-- **Web Crawling** (apple-docs, swift-org, swift-book, swift-evolution): Uses WKWebView to render and crawl JavaScript-heavy documentation sites
+- **Web Crawling** (apple-docs, swift-org, swift-book, swift-evolution): Uses Apple's JSON APIs where available, then WKWebView-rendered HTML by default; optionally uses a Sosumi HTTP API base URL for rendered Markdown
 - **Direct Fetching** (packages, apple-sample-code, samples): Downloads resources directly from APIs without web crawling
 - **Parallel Fetching** (all): Fetches all sources concurrently for maximum efficiency
 
@@ -46,6 +46,7 @@ The `fetch` command is the unified fetching command that handles both web crawli
 - `--baseline <path>` - Path to a known-good baseline corpus directory (e.g. a prior `cupertino-docs/docs` snapshot). On startup, URLs present in the baseline but missing from the current crawl's known set are prepended to the queue so the resumed crawl recovers gaps without a full recrawl. Path comparison is case-insensitive.
 - `--urls <path>` - Path to a text file containing one URL per line. Each URL is enqueued at depth 0; the crawler follows links from each up to `--max-depth`. Set `--max-depth 0` to fetch only the listed URLs with no descent. Useful for fetching a fixed list of URLs another corpus has but this one is missing, without re-spidering. Lines starting with `#` and blank lines are ignored. ([#210](https://github.com/mihaelamj/cupertino/issues/210))
 - `--discovery-mode <mode>` - Discovery mode for the docs crawler. Values: `auto` (default; JSON API primary, WKWebView fallback when JSON returns 404), `json-only` (JSON API only, no fallback. Fastest, narrowest), `webview-only` (WKWebView for everything. Slowest, broadest discovery, matches pre-2025-11-30 behavior). ([#208](https://github.com/mihaelamj/cupertino/issues/208))
+- [--sosumi-base-url](option%20%28--%29/sosumi-base-url.md) - Optional Sosumi HTTP API base URL (for example `https://sosumi.ai` or a self-hosted instance). When set, web crawls fetch rendered Markdown responses instead of using the WKWebView fetcher.
 - `--only-accepted` / `--no-only-accepted` - Only download accepted/implemented proposals (`swift-evolution` source only). On by default; use `--no-only-accepted` to include drafts and rejected proposals.
 
 #### HTML link augmentation in `--discovery-mode auto` (v1.0.2+)
@@ -68,6 +69,12 @@ Backwards-compatible: legacy JSON configs without these fields decode with the d
 ```
 
 No-op in `--discovery-mode json-only` and `--discovery-mode webview-only`.
+
+#### Sosumi Markdown transport
+
+`--sosumi-base-url <url>` swaps the web-rendering transport from WKWebView to the Sosumi HTTP API. The crawler still keeps Apple DocC JSON as the primary path in `--discovery-mode auto`; Sosumi is used for rendered-page fallback and link augmentation, where it returns Markdown instead of HTML.
+
+Use a self-hosted Sosumi instance for large corpus crawls. The public `https://sosumi.ai` service is useful for spot checks and small targeted fetches, but it is an unofficial shared service with rate limits and on-demand caching.
 
 > **Resume is automatic.** If a previous `fetch` was interrupted, just re-run the same command, the crawler picks up its `metadata.json` and continues from where it left off. No flag needed. Use `--start-clean` to override and start over.
 
@@ -137,6 +144,14 @@ cupertino fetch --source hig
 cupertino fetch --start-url https://developer.apple.com/documentation/swiftui \
                 --max-pages 500 \
                 --output-dir ./my-docs
+```
+
+### Custom Web Crawl Through Sosumi
+```bash
+cupertino fetch --source apple-docs \
+                --start-url https://developer.apple.com/documentation/swift/array \
+                --max-depth 0 \
+                --sosumi-base-url https://sosumi.ai
 ```
 
 ### Resume Interrupted Crawl (automatic)

@@ -70,6 +70,18 @@ public extension Crawler {
         }
     }
 
+    struct NoopMarkdownParserStrategy: MarkdownParserStrategy {
+        public init() {}
+
+        public func toStructuredPage(
+            markdown _: String,
+            url _: URL,
+            depth _: Int?
+        ) -> Shared.Models.StructuredDocumentationPage? {
+            nil
+        }
+    }
+
     struct NoopPriorityPackageStrategy: PriorityPackageStrategy {
         public init() {}
 

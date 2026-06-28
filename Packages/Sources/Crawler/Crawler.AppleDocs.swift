@@ -7,12 +7,30 @@ import SharedConstants
 
 // MARK: - Documentation Crawler
 
-/// Main crawler for Apple documentation. Fetches HTML via an injected
-/// `Crawler.HTTPFetcherFactory` (the production composition root wires
-/// `Crawler.WebKit.LiveHTTPFetcherFactory`).
+/// Main crawler for Apple documentation. Fetches rendered page content
+/// via an injected `Crawler.HTTPFetcherFactory` (the production
+/// composition root wires WebKit by default, or Sosumi when requested).
 extension Crawler {
     @MainActor
     public final class AppleDocs: NSObject {
+        private enum RenderedContentFormat {
+            case html
+            case markdown
+        }
+
+        private struct RenderedContent {
+            let content: String
+            let url: URL
+            let format: RenderedContentFormat
+        }
+
+        private struct LoadedPageContent {
+            let structuredPage: Shared.Models.StructuredDocumentationPage?
+            let markdown: String
+            let links: [URL]
+            let storageURL: URL
+        }
+
         private let configuration: Shared.Configuration.Crawler
         private let changeDetection: Shared.Configuration.ChangeDetection
         private let output: Shared.Configuration.Output
@@ -39,6 +57,7 @@ extension Crawler {
         // nor `CorePackageIndexing`.
         private let htmlParser: any Crawler.HTMLParserStrategy
         private let appleJSONParser: any Crawler.AppleJSONParserStrategy
+        private let markdownParser: any Crawler.MarkdownParserStrategy
         private let priorityPackageStrategy: any Crawler.PriorityPackageStrategy
 
         /// GoF Strategy seam for log emission (1994 p. 315). Injected by
@@ -59,6 +78,7 @@ extension Crawler {
             configuration: Shared.Configuration,
             htmlParser: any Crawler.HTMLParserStrategy,
             appleJSONParser: any Crawler.AppleJSONParserStrategy,
+            markdownParser: any Crawler.MarkdownParserStrategy = Crawler.NoopMarkdownParserStrategy(),
             priorityPackageStrategy: any Crawler.PriorityPackageStrategy,
             fetcherFactory: any Crawler.HTTPFetcherFactory,
             logger: any LoggingModels.Logging.Recording
@@ -70,6 +90,7 @@ extension Crawler {
             stats = Shared.Models.CrawlStatistics()
             self.htmlParser = htmlParser
             self.appleJSONParser = appleJSONParser
+            self.markdownParser = markdownParser
             self.priorityPackageStrategy = priorityPackageStrategy
             self.fetcherFactory = fetcherFactory
             self.logger = logger
@@ -384,12 +405,12 @@ extension Crawler {
             let progress = "[\(visited.count)] [\(framework):\(fwPageCount + 1)]"
             logInfo("📄 \(progress) depth=\(depth) \(urlString)")
 
-            // Try JSON API first (better data quality), fall back to HTML if unavailable
+            // Try JSON API first (better data quality), fall back to rendered content if unavailable.
             var structuredPage: Shared.Models.StructuredDocumentationPage?
             var markdown: String
             var links: [URL]
             // storageURL is the post-redirect canonical URL used for all on-disk paths.
-            // For HTML-only paths we have no redirect info, so we fall back to the request URL.
+            // If the rendered fetcher has no redirect info, we fall back to the request URL.
             var storageURL = url
 
             // Check if this URL could have a JSON API endpoint (Apple docs)
@@ -414,7 +435,11 @@ extension Crawler {
 
             if useJSON {
                 do {
-                    (structuredPage, markdown, links, storageURL) = try await loadPageViaJSON(url: url, depth: depth)
+                    let pageContent = try await loadPageViaJSON(url: url, depth: depth)
+                    structuredPage = pageContent.structuredPage
+                    markdown = pageContent.markdown
+                    links = pageContent.links
+                    storageURL = pageContent.storageURL
                     // Augment JSON-extracted links with HTML anchor-tag links when the
                     // page's JSON references dict is sparse. Catches URL patterns the
                     // DocC JSON omits (operator overloads, legacy numeric-IDs, REST
@@ -424,14 +449,14 @@ extension Crawler {
                     if mode == .auto,
                        configuration.htmlLinkAugmentation,
                        links.count < configuration.htmlLinkAugmentationMaxRefs,
-                       let html = try? await loadPage(url: storageURL) {
-                        let htmlLinks = autoreleasepool {
-                            extractLinks(from: html, baseURL: storageURL)
+                       let rendered = try? await loadRenderedPage(url: storageURL) {
+                        let renderedLinks = autoreleasepool {
+                            extractLinks(from: rendered.content, baseURL: rendered.url, format: rendered.format)
                         }
                         let seen = Set(links.map(\.absoluteString))
-                        let added = htmlLinks.filter { !seen.contains($0.absoluteString) }
+                        let added = renderedLinks.filter { !seen.contains($0.absoluteString) }
                         if !added.isEmpty {
-                            logInfo("   🔗 HTML augmentation: +\(added.count) links (page had \(links.count) JSON refs)")
+                            logInfo("   🔗 Rendered augmentation: +\(added.count) links (page had \(links.count) JSON refs)")
                             links += added
                         }
                     }
@@ -440,59 +465,25 @@ extension Crawler {
                         // No fallback in pure JSON-only mode — propagate.
                         throw error
                     }
-                    // JSON API failed, fall back to HTML
-                    logInfo("   ⚠️ JSON API unavailable, using HTML fallback")
-                    let html = try await loadPage(url: url)
-                    if htmlParser.looksLikeHTTPErrorPage(html: html) {
-                        logInfo("   ⏳ HTTP error template detected, deferring for retry (#292)")
-                        throw Error.httpErrorPage
-                    }
-                    if htmlParser.looksLikeJavaScriptFallback(html: html) {
-                        logInfo("   ⛔ Apple SPA no-content sub-view detected, skipping (#284)")
-                        await state.recordRejection(
-                            url: url,
-                            framework: framework,
-                            reason: .javaScriptFallback,
-                            outputDirectory: configuration.outputDirectory
-                        )
-                        await state.recordError()
-                        await state.recordTotalPage()
+                    // JSON API failed, fall back to rendered content.
+                    logInfo("   ⚠️ JSON API unavailable, using rendered fallback")
+                    guard let fallback = try await loadFallbackPage(url: url, depth: depth, framework: framework) else {
                         return
                     }
-                    (markdown, links, structuredPage) = autoreleasepool {
-                        (
-                            htmlParser.convert(html: html, url: url),
-                            extractLinks(from: html, baseURL: url),
-                            htmlParser.toStructuredPage(html: html, url: url, source: .appleWebKit, depth: depth)
-                        )
-                    }
+                    markdown = fallback.markdown
+                    links = fallback.links
+                    structuredPage = fallback.structuredPage
+                    storageURL = fallback.storageURL
                 }
             } else {
-                // No JSON endpoint available, use HTML directly
-                let html = try await loadPage(url: url)
-                if htmlParser.looksLikeHTTPErrorPage(html: html) {
-                    logInfo("   ⏳ HTTP error template detected, deferring for retry (#292)")
-                    throw Error.httpErrorPage
-                }
-                if htmlParser.looksLikeJavaScriptFallback(html: html) {
-                    logInfo("   ⛔ Apple SPA no-content sub-view detected, skipping (#284)")
-                    await state.recordRejection(
-                        url: url,
-                        framework: framework,
-                        reason: .javaScriptFallback,
-                        outputDirectory: configuration.outputDirectory
-                    )
-                    await state.recordError()
-                    await state.recordTotalPage()
+                // No JSON endpoint available, use rendered content directly.
+                guard let fallback = try await loadFallbackPage(url: url, depth: depth, framework: framework) else {
                     return
                 }
-                (markdown, links, structuredPage) = autoreleasepool {
-                    (
-                        htmlParser.convert(html: html, url: url),
-                        extractLinks(from: html, baseURL: url),
-                        htmlParser.toStructuredPage(html: html, url: url, source: .appleWebKit, depth: depth)
-                    )
-                }
+                markdown = fallback.markdown
+                links = fallback.links
+                structuredPage = fallback.structuredPage
+                storageURL = fallback.storageURL
             }
 
             // Compute content hash from structured page or markdown
@@ -610,12 +601,7 @@ extension Crawler {
 
         /// Load page via Apple's JSON API - avoids WKWebView memory issues
         /// Returns structured page data for JSON output, links for crawling, and the post-redirect canonical URL
-        private func loadPageViaJSON(url: URL, depth: Int) async throws -> (
-            structuredPage: Shared.Models.StructuredDocumentationPage?,
-            markdown: String,
-            links: [URL],
-            canonicalURL: URL
-        ) {
+        private func loadPageViaJSON(url: URL, depth: Int) async throws -> LoadedPageContent {
             guard let jsonURL = appleJSONParser.jsonAPIURL(from: url) else {
                 throw Error.invalidState
             }
@@ -652,16 +638,142 @@ extension Crawler {
                     throw Error.invalidHTML
                 }
                 let links = appleJSONParser.extractLinks(from: data)
-                return (structuredPage, markdown, links, canonicalURL)
+                return LoadedPageContent(
+                    structuredPage: structuredPage,
+                    markdown: markdown,
+                    links: links,
+                    storageURL: canonicalURL
+                )
             }
         }
 
-        private func loadPage(url: URL) async throws -> String {
-            // Delegate to the injected StringContentFetcher (#903)
-            try await webPageFetcher.fetch(url: url).content
+        private func loadFallbackPage(
+            url: URL,
+            depth: Int,
+            framework: String
+        ) async throws -> LoadedPageContent? {
+            let rendered = try await loadRenderedPage(url: url)
+
+            switch rendered.format {
+            case .html:
+                return try await loadHTMLFallbackPage(rendered, requestedURL: url, depth: depth, framework: framework)
+
+            case .markdown:
+                return try loadMarkdownFallbackPage(rendered, depth: depth)
+            }
         }
 
-        private func extractLinks(from html: String, baseURL: URL) -> [URL] {
+        private func loadHTMLFallbackPage(
+            _ rendered: RenderedContent,
+            requestedURL: URL,
+            depth: Int,
+            framework: String
+        ) async throws -> LoadedPageContent? {
+            if htmlParser.looksLikeHTTPErrorPage(html: rendered.content) {
+                logInfo("   ⏳ HTTP error template detected, deferring for retry (#292)")
+                throw Error.httpErrorPage
+            }
+            if htmlParser.looksLikeJavaScriptFallback(html: rendered.content) {
+                logInfo("   ⛔ Apple SPA no-content sub-view detected, skipping (#284)")
+                await state.recordRejection(
+                    url: requestedURL,
+                    framework: framework,
+                    reason: .javaScriptFallback,
+                    outputDirectory: configuration.outputDirectory
+                )
+                await state.recordError()
+                await state.recordTotalPage()
+                return nil
+            }
+
+            let parsed = autoreleasepool {
+                (
+                    markdown: htmlParser.convert(html: rendered.content, url: rendered.url),
+                    links: extractLinks(from: rendered.content, baseURL: rendered.url, format: .html),
+                    structuredPage: htmlParser.toStructuredPage(
+                        html: rendered.content,
+                        url: rendered.url,
+                        source: .appleWebKit,
+                        depth: depth
+                    )
+                )
+            }
+            return LoadedPageContent(
+                structuredPage: parsed.structuredPage,
+                markdown: parsed.markdown,
+                links: parsed.links,
+                storageURL: rendered.url
+            )
+        }
+
+        private func loadMarkdownFallbackPage(
+            _ rendered: RenderedContent,
+            depth: Int
+        ) throws -> LoadedPageContent {
+            guard let structuredPage = markdownParser.toStructuredPage(
+                markdown: rendered.content,
+                url: rendered.url,
+                depth: depth
+            ) else {
+                throw Error.invalidMarkdown
+            }
+            let links = autoreleasepool {
+                extractLinks(from: rendered.content, baseURL: rendered.url, format: .markdown)
+            }
+            return LoadedPageContent(
+                structuredPage: structuredPage,
+                markdown: rendered.content,
+                links: links,
+                storageURL: rendered.url
+            )
+        }
+
+        private func loadRenderedPage(url: URL) async throws -> RenderedContent {
+            // Delegate to the injected StringContentFetcher (#903).
+            let result = try await webPageFetcher.fetch(url: url)
+            return RenderedContent(
+                content: result.content,
+                url: result.url,
+                format: Self.contentFormat(from: result)
+            )
+        }
+
+        private nonisolated static func contentFormat(from result: Core.Protocols.FetchResult<String>) -> RenderedContentFormat {
+            if let headers = result.responseHeaders {
+                for (key, value) in headers where key.lowercased() == "content-type" {
+                    let lowercased = value.lowercased()
+                    if lowercased.contains("text/markdown")
+                        || lowercased.contains("application/markdown")
+                        || lowercased.contains("text/x-markdown") {
+                        return .markdown
+                    }
+                }
+            }
+
+            let prefix = result.content.prefix(4096).trimmingCharacters(in: .whitespacesAndNewlines)
+            if prefix.hasPrefix("---\n"),
+               prefix.contains("\nsource:"),
+               prefix.contains("developer.apple.com") {
+                return .markdown
+            }
+
+            return .html
+        }
+
+        private func extractLinks(
+            from content: String,
+            baseURL: URL,
+            format: RenderedContentFormat
+        ) -> [URL] {
+            switch format {
+            case .html:
+                return extractHTMLLinks(from: content, baseURL: baseURL)
+            case .markdown:
+                return extractMarkdownLinks(from: content, baseURL: baseURL)
+            }
+        }
+
+        private func extractHTMLLinks(from html: String, baseURL: URL) -> [URL] {
             var links: [URL] = []
 
             // Extract href attributes from <a> tags
@@ -679,6 +791,25 @@ extension Crawler {
                         links.append(url)
                     }
                 }
+            }
+
+            return links
+        }
+
+        private func extractMarkdownLinks(from markdown: String, baseURL: URL) -> [URL] {
+            var links: [URL] = []
+
+            let pattern = #"(?<!!)\[[^\]]+\]\(([^)\s]+)(?:\s+"[^"]*")?\)"#
+            guard let regex = try? NSRegularExpression(pattern: pattern) else {
+                return links
+            }
+
+            let nsString = markdown as NSString
+            let matches = regex.matches(in: markdown, range: NSRange(location: 0, length: nsString.length))
+            for match in matches where match.numberOfRanges >= 2 {
+                let href = nsString.substring(with: match.range(at: 1))
+                guard let url = URL(string: href, relativeTo: baseURL)?.absoluteURL else { continue }
+                links.append(url)
             }
 
             return links
@@ -841,6 +972,7 @@ extension Crawler.AppleDocs {
         case timeout
         case invalidState
         case invalidHTML
+        case invalidMarkdown
         /// Apple's CDN served a styled HTTP error page (502/429/403 at HTTP 200).
         /// Thrown by `crawlPage` so callers can defer the URL for retry (#292).
         case httpErrorPage
@@ -853,6 +985,8 @@ extension Crawler.AppleDocs {
                 return "Invalid crawler state"
             case .invalidHTML:
                 return "Invalid HTML received"
+            case .invalidMarkdown:
+                return "Invalid Markdown received"
             case .httpErrorPage:
                 return "HTTP error template page received"
             }

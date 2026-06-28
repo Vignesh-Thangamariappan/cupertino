@@ -8,9 +8,9 @@ import SharedConstants
 // MARK: - HIG Crawler
 
 /// Crawls Apple's Human Interface Guidelines
-/// The HIG website is a JavaScript SPA, requiring a JS-rendering
-/// fetcher (the production composition root wires
-/// `Crawler.WebKit.LiveHTTPFetcherFactory`).
+/// The HIG website is a JavaScript SPA by default, so the production
+/// composition root wires a rendered-content fetcher. WebKit is the
+/// default transport; Sosumi can be selected by the CLI for Markdown.
 extension Crawler {
     @MainActor
     // #673 Phase D iter-5: 395-line class — page discovery + HTML parsing
@@ -18,14 +18,19 @@ extension Crawler {
     // splits would scatter the WebView lifetime + per-page state.
     // swiftlint:disable:next type_body_length
     public final class HIG {
+        private enum RenderedContentFormat {
+            case html
+            case markdown
+        }
+
         private let outputDirectory: URL
         private let forceRecrawl: Bool
         private let maxPages: Int
         /// GoF Strategy seam for log emission (1994 p. 315). Threaded
         /// in from the CLI composition root.
         private let logger: any LoggingModels.Logging.Recording
-        /// Strategy seam (#903): the CLI composition root constructs
-        /// `Crawler.WebKit.LiveHTTPFetcherFactory()` and passes it here.
+        /// Strategy seam (#903): the CLI composition root constructs a
+        /// rendered-content fetcher factory and passes it here.
         /// The Crawler producer is foundation-only and never links WebKit.
         private let fetcherFactory: any Crawler.HTTPFetcherFactory
 
@@ -148,19 +153,21 @@ extension Crawler {
 
                 // Load page and extract links
                 logInfo("Loading: \(url.lastPathComponent.isEmpty ? "root" : url.lastPathComponent)")
-                let html: String
+                let fetchedPage: Core.Protocols.FetchResult<String>
                 do {
-                    html = try await loadPage(url: url)
+                    fetchedPage = try await loadPage(url: url)
                 } catch {
                     logError("Failed to load \(url): \(error)")
                     continue
                 }
+                let content = fetchedPage.content
+                let pageURL = fetchedPage.url
 
                 // Extract title from page
-                let title = extractTitle(from: html) ?? url.lastPathComponent
+                let title = extractTitle(from: content) ?? pageURL.lastPathComponent
 
                 // Determine category from URL path
-                let category = extractCategory(from: url)
+                let category = extractCategory(from: pageURL)
 
                 // #1078: derive platforms from the URL slug, not from
                 // HTML substring matching. Pre-fix `extractPlatforms`
@@ -171,10 +178,10 @@ extension Crawler {
                 // of topic. Post-fix: rule-table lookup against the
                 // URL slug (single source of truth shared with the
                 // indexer strategy + SQL pass via HIGPlatformRules).
-                let platforms = Self.inferPlatforms(forURL: url)
+                let platforms = Self.inferPlatforms(forURL: pageURL)
 
                 let page = Page(
-                    url: url,
+                    url: pageURL,
                     title: title,
                     category: category,
                     platforms: platforms
@@ -182,7 +189,7 @@ extension Crawler {
                 pages.append(page)
 
                 // Extract links to other HIG pages
-                let links = extractHIGLinks(from: html, baseURL: url)
+                let links = extractHIGLinks(from: content, baseURL: pageURL)
                 for link in links where !visited.contains(link.absoluteString) {
                     queue.append(link)
                 }
@@ -191,12 +198,12 @@ extension Crawler {
             return pages
         }
 
-        private func loadPage(url: URL) async throws -> String {
+        private func loadPage(url: URL) async throws -> Core.Protocols.FetchResult<String> {
             guard let fetcher else {
                 throw Error.webViewNotInitialized
             }
 
-            return try await fetcher.fetch(url: url).content
+            return try await fetcher.fetch(url: url)
         }
 
         private func crawlPage(_ page: Page, stats: inout Crawler.HIGStatistics) async throws {
@@ -237,10 +244,16 @@ extension Crawler {
 
             // Load page content
             logInfo("📥 Loading: \(page.title)")
-            let html = try await loadPage(url: page.url)
+            let fetchedPage = try await loadPage(url: page.url)
 
             // Convert to markdown
-            let markdown = convertToMarkdown(html, page: page)
+            let markdown: String
+            switch Self.contentFormat(from: fetchedPage) {
+            case .html:
+                markdown = convertToMarkdown(fetchedPage.content, page: page)
+            case .markdown:
+                markdown = fetchedPage.content
+            }
 
             // Save
             do {
@@ -261,6 +274,17 @@ extension Crawler {
         }
 
         private func extractTitle(from html: String) -> String? {
+            if let title = Self.frontmatterValue("title", from: html) {
+                return title
+            }
+
+            for line in html.split(separator: "\n", omittingEmptySubsequences: false) {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if trimmed.hasPrefix("# ") {
+                    return String(trimmed.dropFirst(2)).trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+            }
+
             // Try to extract from <title> tag
             let titlePattern = #"<title[^>]*>([^<]+)</title>"#
             guard let regex = try? NSRegularExpression(pattern: titlePattern, options: .caseInsensitive),
@@ -275,6 +299,54 @@ extension Crawler {
             title = title.replacingOccurrences(of: " - Human Interface Guidelines", with: "")
             title = title.replacingOccurrences(of: " | Apple Developer Documentation", with: "")
             return title.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        private nonisolated static func contentFormat(from result: Core.Protocols.FetchResult<String>) -> RenderedContentFormat {
+            if let headers = result.responseHeaders {
+                for (key, value) in headers where key.lowercased() == "content-type" {
+                    let lowercased = value.lowercased()
+                    if lowercased.contains("text/markdown")
+                        || lowercased.contains("application/markdown")
+                        || lowercased.contains("text/x-markdown") {
+                        return .markdown
+                    }
+                }
+            }
+
+            let prefix = result.content.prefix(4096).trimmingCharacters(in: .whitespacesAndNewlines)
+            if prefix.hasPrefix("---\n"),
+               prefix.contains("\nsource:"),
+               prefix.contains("developer.apple.com") {
+                return .markdown
+            }
+
+            return .html
+        }
+
+        private nonisolated static func frontmatterValue(_ key: String, from markdown: String) -> String? {
+            guard markdown.hasPrefix("---\n") else { return nil }
+            let parts = markdown.dropFirst(4).split(separator: "---", maxSplits: 1)
+            guard let yaml = parts.first else { return nil }
+
+            for line in yaml.split(separator: "\n") {
+                let keyValue = line.split(separator: ":", maxSplits: 1)
+                guard keyValue.count == 2,
+                      keyValue[0].trimmingCharacters(in: .whitespaces) == key
+                else { continue }
+                return unquoteYAMLValue(String(keyValue[1]).trimmingCharacters(in: .whitespacesAndNewlines))
+            }
+
+            return nil
+        }
+
+        private nonisolated static func unquoteYAMLValue(_ value: String) -> String {
+            if value.count >= 2,
+               value.first == "\"",
+               value.last == "\"" {
+                return String(value.dropFirst().dropLast())
+                    .replacingOccurrences(of: "\\\"", with: "\"")
+            }
+            return value
         }
 
         private func extractCategory(from url: URL) -> Category {
@@ -317,37 +389,49 @@ extension Crawler {
             return result
         }
 
-        private func extractHIGLinks(from html: String, baseURL: URL) -> [URL] {
+        private func extractHIGLinks(from content: String, baseURL: URL) -> [URL] {
             var links: [URL] = []
 
             // Extract href values
             let hrefPattern = #"href=[\"']([^\"']*human-interface-guidelines[^\"']*)[\"']"#
-            guard let regex = try? NSRegularExpression(pattern: hrefPattern, options: .caseInsensitive) else {
-                return links
+            if let regex = try? NSRegularExpression(pattern: hrefPattern, options: .caseInsensitive) {
+                let matches = regex.matches(in: content, range: NSRange(content.startIndex..., in: content))
+
+                for match in matches {
+                    guard let range = Range(match.range(at: 1), in: content) else { continue }
+                    let href = String(content[range])
+                    appendHIGLink(href, baseURL: baseURL, to: &links)
+                }
             }
 
-            let matches = regex.matches(in: html, range: NSRange(html.startIndex..., in: html))
+            let markdownPattern = #"(?<!!)\[[^\]]+\]\(([^)\s]*human-interface-guidelines[^)\s]*)(?:\s+"[^"]*")?\)"#
+            if let regex = try? NSRegularExpression(pattern: markdownPattern, options: .caseInsensitive) {
+                let matches = regex.matches(in: content, range: NSRange(content.startIndex..., in: content))
 
-            for match in matches {
-                guard let range = Range(match.range(at: 1), in: html) else { continue }
-                let href = String(html[range])
-
-                // Resolve relative URLs
-                if let url = URL(string: href, relativeTo: baseURL)?.absoluteURL {
-                    // Only include HIG URLs
-                    if url.host == "developer.apple.com",
-                       url.path.contains("/design/human-interface-guidelines") {
-                        // Remove fragment
-                        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
-                        components?.fragment = nil
-                        if let cleanURL = components?.url {
-                            links.append(cleanURL)
-                        }
-                    }
+                for match in matches where match.numberOfRanges >= 2 {
+                    guard let range = Range(match.range(at: 1), in: content) else { continue }
+                    let href = String(content[range])
+                    appendHIGLink(href, baseURL: baseURL, to: &links)
                 }
             }
 
             return Array(Set(links))
+        }
+
+        private func appendHIGLink(_ href: String, baseURL: URL, to links: inout [URL]) {
+            guard let url = URL(string: href, relativeTo: baseURL)?.absoluteURL,
+                  url.host == "developer.apple.com",
+                  url.path.contains("/design/human-interface-guidelines")
+            else {
+                return
+            }
+
+            // Remove fragment
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            components?.fragment = nil
+            if let cleanURL = components?.url {
+                links.append(cleanURL)
+            }
         }
 
         private func convertToMarkdown(_ html: String, page: Page) -> String {

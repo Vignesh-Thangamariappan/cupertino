@@ -77,6 +77,7 @@ FORBIDDEN_MODULES=(
     SearchSQLite
     SampleIndexSQLite
     CrawlerWebKit
+    CrawlerSosumi
     CoreJSONParserWebKit
     CoreSampleCodeWebKit
 )

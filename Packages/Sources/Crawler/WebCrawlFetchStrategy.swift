@@ -92,6 +92,7 @@ public struct WebCrawlFetchStrategy: Search.SourceFetchStrategy {
             configuration: config,
             htmlParser: env.htmlParser,
             appleJSONParser: env.appleJSONParser,
+            markdownParser: env.markdownParser,
             priorityPackageStrategy: env.priorityPackageStrategy,
             fetcherFactory: env.httpFetcherFactory,
             logger: env.logger

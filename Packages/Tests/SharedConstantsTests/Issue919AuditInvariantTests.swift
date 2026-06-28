@@ -46,7 +46,7 @@ struct Issue919AuditInvariantTests {
     }
 
     @Test(
-        "check-target-foundation-only.sh STRICT_PRODUCERS contains exactly 48 entries (CupertinoDataEngine extracted; WebKit-companion siblings excluded)"
+        "check-target-foundation-only.sh STRICT_PRODUCERS contains exactly 49 entries (CupertinoDataEngine extracted; WebKit-companion siblings excluded)"
     )
     func strictProducersHasExpectedCount() throws {
         let scriptURL = Self.repoRoot().appendingPathComponent("scripts/check-target-foundation-only.sh")
@@ -73,7 +73,7 @@ struct Issue919AuditInvariantTests {
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
             .filter { $0.first.map { $0.isLetter || $0 == "_" } ?? false } // identifier-shaped
-        // Post-CupertinoDataEngine extraction: 48 producers strict. CoreJSONParserWebKit +
+        // Post-#1318 Sosumi transport: 49 producers strict. CoreJSONParserWebKit +
         // CoreSampleCodeWebKit (added by #904) are WebKit-companion
         // siblings that legitimately import their parent producer to
         // extend its types. They are off STRICT_PRODUCERS but on
@@ -96,7 +96,9 @@ struct Issue919AuditInvariantTests {
         //   real). 49 -> 48.
         // - CupertinoDataEngine: extracted to its own external package,
         //   so the in-tree strict producer list returns to 48.
-        #expect(entries.count == 48, "expected 48 strict producers, found \(entries.count): \(entries)")
+        // - #1318: CrawlerSosumi sibling (+1; URLSession-backed Sosumi
+        //   Markdown transport).
+        #expect(entries.count == 49, "expected 49 strict producers, found \(entries.count): \(entries)")
     }
 
     @Test("FORBIDDEN_MODULES list contains every concrete + the two *SQLite siblings")
@@ -114,6 +116,7 @@ struct Issue919AuditInvariantTests {
             "SampleIndexSQLite",
             "Enrichment",
             "CrawlerWebKit",
+            "CrawlerSosumi",
             "CoreJSONParserWebKit",
             "CoreSampleCodeWebKit",
         ]

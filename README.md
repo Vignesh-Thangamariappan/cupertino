@@ -166,7 +166,7 @@ See **[docs/tools/](docs/tools/)** for per-tool documentation.
 
 ### Intelligent crawling
 
-Resumable from saved state, change-detection to skip unchanged pages, a respectful 0.05 s default delay (configurable), automatic URL-queue deduplication, and priority queues so important content is fetched first.
+Resumable from saved state, change-detection to skip unchanged pages, a respectful 0.05 s default delay (configurable), automatic URL-queue deduplication, and priority queues so important content is fetched first. Web crawls use Apple JSON plus WKWebView by default, with `fetch --sosumi-base-url <url>` available for opt-in Sosumi Markdown transport.
 
 ## How it works
 

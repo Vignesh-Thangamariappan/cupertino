@@ -290,6 +290,7 @@ STRICT_PRODUCERS=(
     SamplesAppleConstraintsPass
     SynonymsPass
     CrawlerWebKit
+    CrawlerSosumi
     SearchToolProvider
     Services
 )

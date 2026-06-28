@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Added
+
+- **feat(#1318): opt-in Sosumi Markdown transport for web crawls.** `cupertino fetch --sosumi-base-url <url>` can now use a Sosumi HTTP API endpoint for rendered-page fallback and link augmentation, parsing Markdown responses directly while keeping Apple DocC JSON as the primary path in `auto` discovery mode. Apple docs and HIG crawlers both understand `text/markdown` responses; WKWebView remains the default when the flag is omitted. The Sosumi base URL is normalized before use, and non-Apple external DocC URLs are percent-encoded under `/external/` so copied docs fragments and source query strings cannot corrupt the route.
+
 ### Changed
 
 - **feat(#50): `list_children` delegates to CupertinoDataEngine's topic-group parser (shared with the embedded apps).** The MCP `list_children` tool and the `cupertino list-children` CLI command now route through `CupertinoDataEngine` (bumped 0.2.7 -> 0.2.8), whose `listChildren` parses a document's `## Topics` section into its `###` topic groups (fragment URIs like `apple-docs://kernel#3616595`) and their member documents. The duplicate `SearchSQLite/Search.Index.DocumentChildren.swift` parser and the now-unused `Services.SearchService.listChildren` requirement are removed, so the server and the embedded apps (cupertino-desktop) share ONE implementation instead of two copies that can drift. The composition root injects the engine-backed `Search.DocumentChildrenListing` into `CompositeToolProvider`; behavior is unchanged for already-correct pages. Full suite green (3175 tests). Closes the server side of cupertino-desktop #50.

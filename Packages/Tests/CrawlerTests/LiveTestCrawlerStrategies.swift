@@ -69,6 +69,16 @@ struct LiveTestAppleJSONParserStrategy: Crawler.AppleJSONParserStrategy {
     }
 }
 
+struct LiveTestMarkdownParserStrategy: Crawler.MarkdownParserStrategy {
+    func toStructuredPage(
+        markdown: String,
+        url: URL,
+        depth _: Int?
+    ) -> Shared.Models.StructuredDocumentationPage? {
+        Core.JSONParser.MarkdownToStructuredPage.convert(markdown, url: url)
+    }
+}
+
 struct LiveTestPriorityPackageStrategy: Crawler.PriorityPackageStrategy {
     func generate(
         swiftOrgDocsPath: URL,
