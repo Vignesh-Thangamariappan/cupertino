@@ -28,7 +28,7 @@ extension Distribution.Setup {
                 return """
                 File not found: \(url)
 
-                The release may not exist yet. Check: https://github.com/mihaelamj/cupertino-docs/releases
+                The release asset may not exist yet. Check: https://cupertino-assets.fly.dev/releases
                 """
             case .httpError(let code):
                 return "HTTP error: \(code)"
@@ -40,7 +40,7 @@ extension Distribution.Setup {
                 return "unzip did not complete within \(seconds)s and was terminated. " +
                     "The archive may be corrupted, or extraction is unusually slow on this disk. " +
                     "Rerun `cupertino setup` to retry, or download manually from " +
-                    "https://github.com/mihaelamj/cupertino-docs/releases."
+                    "https://cupertino-assets.fly.dev/releases."
             }
         }
     }

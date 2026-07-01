@@ -13,7 +13,7 @@ Cupertino is a CLI for human developers and an MCP server for AI agents. Both su
 
 ![Cupertino Demo](docs/images/cupertino.gif)
 
-> **Latest: v1.4.1** (2026-06-24): refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to **363,562 documents / 308,118 symbols across 417 frameworks**, now including post-WWDC26 iOS 27 content, alongside the HIG, archive, Swift Evolution, Swift.org, Swift Book, package, and sample-code DBs (8 per-source databases, read-only rollback mode). [Release notes](https://github.com/mihaelamj/cupertino/releases/tag/v1.4.1) · [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
+> **Latest: v1.4.2** (2026-07-01): setup hotfix. The binary keeps the v1.4.0 database bundle but downloads it from Fly-hosted Cupertino assets instead of GitHub-hosted release/raw URLs. [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
 
 > If Cupertino is useful to your work with Apple docs or AI agents, consider [sponsoring its development](https://github.com/sponsors/mihaelamj). Sponsorship helps keep releases, documentation, and the Apple/Linux tooling around it moving.
 
@@ -39,24 +39,24 @@ Why build this:
 
 Requires **macOS 15+ (Sequoia)** and ~4.2 GB free disk for the full v1.4.0 bundle (compressed download ~876 MB). Building from source additionally needs Swift 6.3+ and Xcode 26+ (use `xcrun swift build`, not bare `swift`).
 
-**Homebrew (recommended):** installs the signed, notarized universal binary and lets you upgrade or uninstall it with `brew`:
+**Homebrew (recommended):** installs the universal binary and lets you upgrade or uninstall it with `brew`:
 
 ```bash
-brew tap mihaelamj/tap
-brew install cupertino
+brew tap cupertinohq/tap https://codeberg.org/CupertinoHQ/homebrew-tap.git
+brew install cupertinohq/tap/cupertino
 cupertino setup            # download the pre-built databases
 ```
 
 **One-command install (alternative):** downloads the binary to `/usr/local/bin` and fetches the databases in one step:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/mihaelamj/cupertino/main/install.sh)
+bash <(curl -sSL https://codeberg.org/CupertinoHQ/cupertino/raw/branch/main/install.sh)
 ```
 
 **Build from source:**
 
 ```bash
-git clone https://github.com/mihaelamj/cupertino.git
+git clone https://codeberg.org/CupertinoHQ/cupertino.git
 cd cupertino
 make build                 # release binary (or: cd Packages && swift build -c release)
 sudo make install          # install to /usr/local/bin
@@ -398,10 +398,10 @@ I prefer collaboration over competition: if you're working on something similar,
 
 ## Related repositories
 
-- **[cupertino-docs](https://github.com/mihaelamj/cupertino-docs)**: pre-built documentation archive for quick installation
-- **[cupertino-sample-code](https://github.com/mihaelamj/cupertino-sample-code)**: Apple sample-code repository mirror
-- **[cupertino-packages](https://github.com/mihaelamj/cupertino-packages)**: Swift package source corpus indexed into `packages.db`
-- **[cupertino-symbolgraphs](https://github.com/mihaelamj/cupertino-symbolgraphs)**: Apple SDK symbol-graph corpus, the source for the `apple-constraints.json` and `apple-conformances.json` enrichment tables
+- **[cupertino-docs](https://codeberg.org/CupertinoHQ/cupertino-docs)**: pre-built documentation archive for quick installation
+- **[cupertino-sample-code](https://codeberg.org/CupertinoHQ/cupertino-sample-code)**: Apple sample-code repository mirror
+- **[cupertino-packages](https://codeberg.org/CupertinoHQ/cupertino-packages)**: Swift package source corpus indexed into `packages.db`
+- **[cupertino-symbolgraphs](https://codeberg.org/CupertinoHQ/cupertino-symbolgraphs)**: Apple SDK symbol-graph corpus, the source for the `apple-constraints.json` and `apple-conformances.json` enrichment tables
 
 ## License
 

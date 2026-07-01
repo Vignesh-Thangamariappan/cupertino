@@ -75,10 +75,10 @@ extension Distribution.SetupService {
         )
 
         // 1. Single bundle download — search.db + samples.db + packages.db
-        //    all ship together from `mihaelamj/cupertino-docs` as of
-        //    v1.0.0. The packages DB used to live in a separate companion
-        //    repo (`mihaelamj/cupertino-packages`) but was folded into
-        //    the main bundle to keep `cupertino setup` to one download.
+        //    all ship together as of v1.0.0. The packages DB used to
+        //    live in a separate companion repo (`mihaelamj/cupertino-packages`)
+        //    but was folded into the main bundle to keep `cupertino setup`
+        //    to one download.
         let zipFilename = "cupertino-databases-v\(request.currentDocsVersion).zip"
         let zipURL = request.baseDir.appendingPathComponent(zipFilename)
         let urlString = "\(request.docsReleaseBaseURL)/v\(request.currentDocsVersion)/\(zipFilename)"
@@ -102,10 +102,9 @@ extension Distribution.SetupService {
         // 1+2 only) to ~38% (with iter 3). Without it the indexer
         // silently degrades.
         //
-        // The file ships in the cupertino-docs git tree at
-        // `apple-constraints.json` (committed 2026-05-27 commit
-        // 0860213a). Setup fetches it via the GitHub raw URL since
-        // it's not in the v1.2.0 release zip.
+        // The file ships as `apple-constraints.json` alongside the Fly
+        // setup assets. It is separate from the database zip so it can
+        // be refreshed independently from the v1.4.0 bundle.
         //
         // Optional + non-fatal: a setup that fails to fetch the
         // sidecar still ends in a usable state (saves degrade to iter
@@ -120,7 +119,7 @@ extension Distribution.SetupService {
         // never have the constraints file, perpetuating the
         // iter-1+2-only enrichment gap that the file is meant to
         // close.
-        let constraintsURLString = "https://raw.githubusercontent.com/mihaelamj/cupertino-docs/main/apple-constraints.json"
+        let constraintsURLString = Shared.Constants.App.appleConstraintsURL
         let constraintsLocalURL = request.baseDir.appendingPathComponent("apple-constraints.json")
         do {
             try await downloadConstraintsSidecar(

@@ -1,5 +1,11 @@
 ## Unreleased
 
+## 1.4.2 (2026-07-01)
+
+### Fixed
+
+- **fix(setup): move setup assets from GitHub to Fly.** The v1.4.1 Homebrew binary could install but `cupertino setup` still downloaded the `cupertino-databases-v1.4.0.zip` bundle and `apple-constraints.json` sidecar from GitHub-hosted URLs that now return 404 after the GitHub account suspension. The v1.4.2 binary keeps `databaseVersion` at `1.4.0` and downloads the same known-good database bundle from `https://cupertino-assets.fly.dev/releases/v1.4.0/cupertino-databases-v1.4.0.zip`, with the constraints sidecar at `https://cupertino-assets.fly.dev/apple-constraints.json`. No corpus rebuild and no schema/content version bump.
+
 ## 1.4.1 (2026-06-24)
 
 ### Changed

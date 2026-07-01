@@ -76,7 +76,7 @@ swift build --product cupertino-constraints-gen
 `apple-constraints.json` (not the raw corpus) is the runtime input. Consumers:
 
 - **`cupertino save`** reads `<baseDir>/apple-constraints.json`. The declarative enrichment-input preflight (`Search.EnrichmentInputPreflight`) hard-fails before indexing if it is absent and a selected source declares it (apple-docs / samples / packages, via `SourceDefinition.requiredEnrichmentInputs`), unless `--allow-degraded-enrichment` is passed. `AppleConstraintsKit.Table` loads it; the `constraints` / `hierarchy` / `samples-apple-constraints` / `packages-apple-constraints` passes stamp `generic_constraints` onto `doc_symbols` / `file_symbols` / `package_symbols`.
-- **`cupertino setup`** downloads it from `https://raw.githubusercontent.com/mihaelamj/cupertino-docs/main/apple-constraints.json` into `<baseDir>/apple-constraints.json` so end users get it without running the generator.
+- **`cupertino setup`** downloads it from `https://cupertino-assets.fly.dev/apple-constraints.json` into `<baseDir>/apple-constraints.json` so end users get it without running the generator.
 
 The raw symbol-graph corpus is used ONLY by `cupertino-constraints-gen` (and the `cupertino-symbolgraphs-audit` validator). Nothing in the `cupertino` runtime reads `*.symbols.json` directly.
 
@@ -87,7 +87,7 @@ The raw symbol-graph corpus is used ONLY by `cupertino-constraints-gen` (and the
 | `*.symbols.json` corpus | `cupertino-symbolgraphs/corpus/` (working), `output/` | **No** (gitignored: `*.symbols.json`, `/corpus/`, `/output/`) | GitHub Releases on `cupertino-symbolgraphs`, one zip per Swift version |
 | `manifest.json` (corpus manifest) | alongside the corpus | the *last-published* manifest is committed to `cupertino-symbolgraphs`; the regenerated copy is gitignored | with the corpus zip |
 | `apple-constraints.json` (derived table) | `cupertino-docs/apple-constraints.json` (distribution); `<baseDir>/apple-constraints.json` (runtime) | **Yes**, committed to `cupertino-docs` | `cupertino setup` raw-github fetch |
-| `generic_constraints` columns (enrichment output) | per-source DBs (`apple-documentation.db` / `apple-sample-code.db` / `packages.db`) | No (DBs ship via GitHub Releases) | `cupertino setup` DB bundle |
+| `generic_constraints` columns (enrichment output) | per-source DBs (`apple-documentation.db` / `apple-sample-code.db` / `packages.db`) | No (DBs ship via the Fly asset service) | `cupertino setup` DB bundle |
 
 Rule of thumb: **the corpus is gitignored and released; the derived table is committed and distributed.** A `*.symbols.json` file must never be committed to any repo, and `apple-constraints.json` must never be derived on the fly from a remote source (download-first, then build locally).
 

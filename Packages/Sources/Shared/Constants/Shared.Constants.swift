@@ -254,7 +254,7 @@ extension Shared.Constants {
         public static let userAgent = "CupertinoCrawler/1.0"
 
         /// Current version
-        public static let version = "1.4.1"
+        public static let version = "1.4.2"
 
         /// Database version - separate from CLI version, only bump when schema/content changes.
         /// Controls the cupertino-docs release tag that `cupertino setup` downloads from.
@@ -294,12 +294,16 @@ extension Shared.Constants {
         /// version number.
         public static let databaseVersion = "1.4.0"
 
-        /// Base URL for cupertino-docs release downloads. As of v1.0.0 the
+        /// Base URL for cupertino database bundle downloads. As of v1.0.0 the
         /// single `cupertino-databases-vX.zip` artifact bundles search.db,
         /// samples.db, and packages.db — earlier versions split packages.db
         /// into a separate `mihaelamj/cupertino-packages` companion repo
         /// which is now deprecated.
-        public static let docsReleaseBaseURL = "https://github.com/mihaelamj/cupertino-docs/releases/download"
+        public static let docsReleaseBaseURL = "https://cupertino-assets.fly.dev/releases"
+
+        /// URL for the optional Apple SDK constraints sidecar downloaded by
+        /// `cupertino setup` after the database bundle.
+        public static let appleConstraintsURL = "https://cupertino-assets.fly.dev/apple-constraints.json"
 
         /// Approximate database zip file size for progress display when Content-Length is unknown.
         /// v1.0.0 bundle is ~833 MB (search.db + samples.db + packages.db, DEFLATE-compressed).
