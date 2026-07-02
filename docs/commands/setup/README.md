@@ -10,28 +10,28 @@ cupertino setup
 
 ## Description
 
-The `setup` command downloads pre-built databases from GitHub Releases, providing instant access to Apple documentation, sample code, and Swift package search without crawling or indexing.
+The `setup` command downloads pre-built databases from Cupertino's Fly-hosted asset service, providing instant access to Apple documentation, sample code, and Swift package search without crawling or indexing.
 
 This is the **fastest way to get started** with Cupertino.
 
-Every database ships in a single bundle from the `cupertino-docs` releases (`cupertino-databases-vX.zip`). One download, one extract, every database on disk. (Earlier releases split `packages.db` into a separate companion repo; that proved to be needless complexity and is gone as of v1.0.0.)
+Every database ships in a single bundle (`cupertino-databases-vX.zip`). One download, one extract, every database on disk. (Earlier releases split `packages.db` into a separate companion repo; that proved to be needless complexity and is gone as of v1.0.0.)
 
 ## What Gets Downloaded
 
-A single zip from the `cupertino-docs` GitHub Releases (`cupertino-databases-vX.zip`) containing every per-source database. Exact contents vary by release; the v1.3.0 bundle ships:
+A single zip from the Fly asset host (`cupertino-databases-vX.zip`) containing every per-source database. Exact contents vary by release; the v1.4.0 bundle ships:
 
 | Database | Contents | Size |
 |----------|----------|------|
-| `apple-documentation.db` | 351,505 Apple documentation pages / 240,543 AST symbols across 420+ frameworks | ~2.8 GB |
+| `apple-documentation.db` | 363,562 Apple documentation pages / 308,118 AST symbols across 417 frameworks | ~2.7 GB |
 | `hig.db` | Human Interface Guidelines | ~12 MB |
 | `apple-archive.db` | Legacy Apple programming guides | ~25 MB |
 | `swift-evolution.db` | Swift Evolution proposals | ~25 MB |
 | `swift-org.db` | Swift.org documentation | ~14 MB |
 | `swift-book.db` | The Swift Programming Language book | ~2 MB |
-| `apple-sample-code.db` | Apple sample-code catalog + crawled GitHub sample projects (READMEs + source files + AST symbols) | ~192 MB |
-| `packages.db` | 185 Swift packages with README, Package.swift, Sources/, Tests/, .docc/ extracted | ~1.09 GB |
+| `apple-sample-code.db` | Apple sample-code catalog + crawled GitHub sample projects (READMEs + source files + AST symbols) | ~189 MB |
+| `packages.db` | 185 Swift packages with README, Package.swift, Sources/, Tests/, .docc/ extracted | ~1.2 GB |
 
-Numbers above are approximate and snapshot the v1.3.0 bundle (~742 MB compressed download, ~4.2 GB on disk); check the corresponding GitHub Release for the per-release totals.
+Numbers above are approximate and snapshot the v1.4.0 bundle (876,442,710-byte compressed download, ~4.2 GB on disk).
 
 ## Options
 

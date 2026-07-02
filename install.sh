@@ -4,7 +4,7 @@
 # One-command install for macOS
 #
 # Usage:
-#   curl -sSL https://raw.githubusercontent.com/mihaelamj/cupertino/main/install.sh | bash
+#   curl -sSL https://codeberg.org/CupertinoHQ/cupertino/raw/branch/main/install.sh | bash
 #
 # Options:
 #   --build    Force build from source instead of downloading binary
@@ -20,7 +20,9 @@
 set -e
 
 # Configuration
-REPO="mihaelamj/cupertino"
+REPO="CupertinoHQ/cupertino"
+PACKAGE_OWNER="CupertinoHQ"
+DEFAULT_VERSION="v1.4.2"
 INSTALL_PATH="/usr/local/bin/cupertino"
 FORCE_BUILD=false
 SKIP_PROMPT=false
@@ -93,20 +95,16 @@ fi
 TEMP_DIR=$(mktemp -d)
 trap "rm -rf $TEMP_DIR" EXIT
 
-# Get latest release version
-info "Checking latest release..."
-LATEST_VERSION=$(curl -sL "https://api.github.com/repos/${REPO}/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-
-if [[ -z "$LATEST_VERSION" ]]; then
-    warn "Could not determine latest version, will build from source"
-    FORCE_BUILD=true
-else
-    info "Latest version: $LATEST_VERSION"
-fi
+# Codeberg generic packages do not expose GitHub-style latest-release
+# metadata. Keep the default explicit and overrideable for emergency
+# installs: `CUPERTINO_INSTALL_VERSION=v1.4.2 install.sh`.
+LATEST_VERSION="${CUPERTINO_INSTALL_VERSION:-$DEFAULT_VERSION}"
+info "Version: $LATEST_VERSION"
 
 # Try to download pre-built binary
 download_binary() {
-    local BINARY_URL="https://github.com/${REPO}/releases/download/${LATEST_VERSION}/cupertino-${LATEST_VERSION}-macos-universal.tar.gz"
+    local PACKAGE_VERSION="${LATEST_VERSION#v}"
+    local BINARY_URL="https://codeberg.org/api/packages/${PACKAGE_OWNER}/generic/cupertino/${PACKAGE_VERSION}/cupertino-${LATEST_VERSION}-macos-universal.tar.gz"
 
     info "Downloading pre-built binary..."
     if curl -sL --fail -o "$TEMP_DIR/cupertino.tar.gz" "$BINARY_URL" 2>/dev/null; then
@@ -129,7 +127,7 @@ build_from_source() {
     info "Found: $(swift --version 2>&1 | head -1)"
 
     info "Cloning repository..."
-    git clone --depth 1 "https://github.com/${REPO}.git" "$TEMP_DIR/cupertino-src" 2>&1 | tail -1
+    git clone --depth 1 "https://codeberg.org/${REPO}.git" "$TEMP_DIR/cupertino-src" 2>&1 | tail -1
 
     info "Building from source (this may take 1-2 minutes)..."
     cd "$TEMP_DIR/cupertino-src/Packages"
@@ -173,7 +171,7 @@ success "Installed: cupertino $VERSION"
 
 # Download databases
 echo ""
-info "Downloading documentation databases (~230 MB)..."
+info "Downloading documentation databases (~876 MB compressed)..."
 cupertino setup
 
 # Done!

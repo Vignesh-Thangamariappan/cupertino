@@ -13,7 +13,7 @@ Cupertino is a CLI for human developers and an MCP server for AI agents. Both su
 
 ![Cupertino Demo](docs/images/cupertino.gif)
 
-> **Latest: v1.4.0** (2026-06-21): refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to **363,562 documents / 308,118 symbols across 417 frameworks**, now including post-WWDC26 iOS 27 content, alongside the HIG, archive, Swift Evolution, Swift.org, Swift Book, package, and sample-code DBs (8 per-source databases, read-only rollback mode). [Release notes](https://codeberg.org/CupertinoHQ/cupertino/src/tag/v1.4.0/CHANGELOG.md) · [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
+> **Latest: v1.4.2** (2026-07-01): setup hotfix. The binary keeps the v1.4.0 database bundle (363,562 documents / 308,118 symbols across 417 frameworks) but downloads it from Fly-hosted Cupertino assets instead of the retired GitHub release URLs. [Release notes](https://codeberg.org/CupertinoHQ/cupertino/src/tag/v1.4.2/CHANGELOG.md) · [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
 
 ## What is Cupertino?
 
@@ -37,7 +37,7 @@ Why build this:
 
 Requires **macOS 15+ (Sequoia)** and ~4.2 GB free disk for the full v1.4.0 bundle (compressed download ~876 MB). Building from source additionally needs Swift 6.3+ and Xcode 26+ (use `xcrun swift build`, not bare `swift`).
 
-**Homebrew (recommended):** installs the signed, notarized universal binary and lets you upgrade or uninstall it with `brew`:
+**Homebrew (recommended):** installs the universal binary and lets you upgrade or uninstall it with `brew`:
 
 ```bash
 brew tap cupertinohq/tap https://codeberg.org/CupertinoHQ/homebrew-tap.git

@@ -113,16 +113,76 @@ extension CupertinoComposition {
         )
     }
 
-    /// The documentation-tree children listing (issue #50), backed by the embedded data engine
-    /// over the current per-source corpus. Returned as the `Search.DocumentChildrenListing`
-    /// protocol so callers (the MCP `list_children` tool) consume one shared parser without
-    /// naming the engine. The engine parses a document's `## Topics` section into topic groups
-    /// and their member documents; the server and the embedded apps now share this single
-    /// implementation instead of maintaining two copies.
-    public static func makePerSourceDocumentChildrenListing(
+    /// The documentation browser (list documents + list topic-group children, issue #50 /
+    /// query-side source pluggability), backed by the embedded data engine over the current
+    /// per-source corpus. Returned as the `Search.DocumentBrowsing` protocol so callers (the MCP
+    /// `list_documents` / `list_children` tools and the matching CLI commands) consume one shared
+    /// implementation without naming the engine. The engine has a reader per source, so browsing
+    /// works for ALL sources (apple-docs, hig, apple-archive, swift-evolution, swift-org,
+    /// swift-book), not just apple-docs.
+    public static func makePerSourceDocumentBrowsing(
         corpusDirectory: URL,
         logger: any Logging.Recording
-    ) async throws -> any Search.DocumentChildrenListing {
+    ) async throws -> any Search.DocumentBrowsing {
         try await makePerSourceReadOnlyDataEngine(corpusDirectory: corpusDirectory, logger: logger)
+    }
+
+    /// Browsing surface for the unified `list` tool (#1311): the same engine, exposed both as the
+    /// shared `Search.DocumentBrowsing` (levels 2/3) AND as a per-source framework lister (level 1).
+    /// Built from ONE engine so the per-source DBs open once. The frameworks closure routes to the
+    /// per-source reader (`documentBrowser(id:).listFrameworks()`), so each source lists its OWN
+    /// frameworks rather than the global merged set the source-blind `list_frameworks` returned.
+    public struct PerSourceBrowsing: Sendable {
+        public let browsing: any Search.DocumentBrowsing
+        public let frameworks: @Sendable (String) async throws -> [String: Int]
+        /// The sources browsed as catalogs (samples, packages) rather than document graphs: their
+        /// corpus is entries-with-file-trees, so the `list` tool routes them through the catalog
+        /// closures below instead of `browsing`/`frameworks`.
+        public let catalogSources: Set<String>
+        /// Level 1 for a catalog source: one window of its entries (every project / every package,
+        /// paged across the whole corpus).
+        public let catalogEntries: @Sendable (_ source: String, _ offset: Int, _ limit: Int) async throws -> Search.CatalogEntryPage
+        /// Levels 2..N for a catalog source: the immediate children of a node (an entry root or a
+        /// folder beneath it), walking the entry's file tree.
+        public let catalogChildren: @Sendable (_ source: String, _ parentURI: String) async throws -> [Search.CatalogNode]
+    }
+
+    public static func makePerSourceBrowsing(
+        corpusDirectory: URL,
+        logger: any Logging.Recording
+    ) async throws -> PerSourceBrowsing {
+        let engine = try await makePerSourceReadOnlyDataEngine(corpusDirectory: corpusDirectory, logger: logger)
+        let catalogSources: Set<String> = [CupertinoDataKit.SourceIDs.samples, CupertinoDataKit.SourceIDs.packages]
+        return PerSourceBrowsing(
+            browsing: engine,
+            frameworks: { source in try await engine.documentBrowser(id: source).listFrameworks() },
+            catalogSources: catalogSources,
+            catalogEntries: { source, offset, limit in
+                let page = try await Self.catalog(for: source, engine: engine).listEntries(offset: offset, limit: limit)
+                return Search.CatalogEntryPage(
+                    entries: page.entries.map { Search.CatalogEntry(id: $0.id, title: $0.title, fileCount: $0.fileCount) },
+                    offset: page.offset,
+                    limit: page.limit,
+                    total: page.total
+                )
+            },
+            catalogChildren: { source, parentURI in
+                try await Self.catalog(for: source, engine: engine)
+                    .listChildren(parentURI: parentURI)
+                    .map { Search.CatalogNode(uri: $0.uri, name: $0.name, isDirectory: $0.isDirectory) }
+            }
+        )
+    }
+
+    /// Resolve a catalog source id to its engine catalog browser (samples / packages).
+    private static func catalog(for source: String, engine: CupertinoDataEngine) async throws -> any CupertinoDataEngine.CatalogBrowser {
+        switch source {
+        case CupertinoDataKit.SourceIDs.samples:
+            try await engine.sampleCatalog()
+        case CupertinoDataKit.SourceIDs.packages:
+            try await engine.packageCatalog()
+        default:
+            throw CupertinoDataEngine.Error.sourceNotConfigured(source)
+        }
     }
 }

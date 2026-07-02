@@ -58,6 +58,23 @@ struct SharedConstantsPublicSurfaceTests {
         #expect(Shared.Constants.BaseURL.appleTutorialsData.hasPrefix("https://"))
         #expect(Shared.Constants.BaseURL.appleTutorialsDocs.hasPrefix("https://"))
     }
+
+    @Test("Setup asset URLs are Fly-hosted and database-version compatible")
+    func setupAssetURLs() throws {
+        let releaseBase = try #require(URL(string: Shared.Constants.App.docsReleaseBaseURL))
+        #expect(releaseBase.scheme == "https")
+        #expect(releaseBase.host == "cupertino-assets.fly.dev")
+        #expect(releaseBase.path == "/releases")
+
+        let constraintsURL = try #require(URL(string: Shared.Constants.App.appleConstraintsURL))
+        #expect(constraintsURL.scheme == "https")
+        #expect(constraintsURL.host == "cupertino-assets.fly.dev")
+        #expect(constraintsURL.path == "/apple-constraints.json")
+
+        let version = Shared.Constants.App.databaseVersion
+        let zipURL = "\(Shared.Constants.App.docsReleaseBaseURL)/v\(version)/cupertino-databases-v\(version).zip"
+        #expect(zipURL == "https://cupertino-assets.fly.dev/releases/v1.4.0/cupertino-databases-v1.4.0.zip")
+    }
 }
 
 // MARK: - #101: user-archive-selections single source of truth

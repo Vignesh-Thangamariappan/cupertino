@@ -254,7 +254,7 @@ extension Shared.Constants {
         public static let userAgent = "CupertinoCrawler/1.0"
 
         /// Current version
-        public static let version = "1.4.0"
+        public static let version = "1.4.2"
 
         /// Database version - separate from CLI version, only bump when schema/content changes.
         /// Controls the cupertino-docs release tag that `cupertino setup` downloads from.
@@ -294,12 +294,16 @@ extension Shared.Constants {
         /// version number.
         public static let databaseVersion = "1.4.0"
 
-        /// Base URL for cupertino-docs release downloads. As of v1.0.0 the
+        /// Base URL for cupertino database bundle downloads. As of v1.0.0 the
         /// single `cupertino-databases-vX.zip` artifact bundles search.db,
         /// samples.db, and packages.db — earlier versions split packages.db
         /// into a separate `mihaelamj/cupertino-packages` companion repo
         /// which is now deprecated.
-        public static let docsReleaseBaseURL = "https://github.com/mihaelamj/cupertino-docs/releases/download"
+        public static let docsReleaseBaseURL = "https://cupertino-assets.fly.dev/releases"
+
+        /// URL for the optional Apple SDK constraints sidecar downloaded by
+        /// `cupertino setup` after the database bundle.
+        public static let appleConstraintsURL = "https://cupertino-assets.fly.dev/apple-constraints.json"
 
         /// Approximate database zip file size for progress display when Content-Length is unknown.
         /// v1.0.0 bundle is ~833 MB (search.db + samples.db + packages.db, DEFLATE-compressed).
@@ -751,8 +755,20 @@ extension Shared.Constants {
         /// Unified search tool name (replaces search_docs, search_hig, search_all, search_samples)
         public static let toolSearch = "search"
 
-        /// List frameworks tool name
+        /// List frameworks tool name. Post-#1311 a thin alias for `list` level 1.
         public static let toolListFrameworks = "list_frameworks"
+
+        /// Unified, source-aware hierarchy navigation tool (#1311). `list(source)` (level 0 /
+        /// omitted) returns the source's `Search.SourceHierarchy`; `list(source, level:N,
+        /// parent:…)` walks it. Replaces the source-blind `list_frameworks`.
+        public static let toolList = "list"
+
+        /// `list` tool: 1-based depth to enumerate (0 / omitted = describe the source). Int.
+        public static let schemaParamLevel = "level"
+
+        /// `list` tool: the parent node from the level above (a framework id at level 2, a node
+        /// uri at level 3). Omitted for level 1.
+        public static let schemaParamParent = "parent"
 
         /// Read document tool name
         public static let toolReadDocument = "read_document"
