@@ -10,7 +10,8 @@ import SharedConstants
 extension Sample.Core {
     public final class GitHubFetcher: Sample.Core.GitHubFetching {
         private let outputDirectory: URL
-        private let repoOwner = "mihaelamj"
+        private let repoHost = "https://git.aleahim.com"
+        private let repoOwner = "CupertinoCorpusHQ"
         private let repoName = "cupertino-sample-code"
         private let branch = "main"
         /// GoF Strategy seam for log emission (1994 p. 315).
@@ -50,7 +51,7 @@ extension Sample.Core {
             // `GitHubFetcherProgress(message: line)`).
             _ = progress
 
-            let repoURL = "https://github.com/\(repoOwner)/\(repoName).git"
+            let repoURL = "\(repoHost)/\(repoOwner)/\(repoName).git"
             let repoPath = outputDirectory.appendingPathComponent(repoName)
 
             logInfo("🚀 Fetching Apple sample code from GitHub")
