@@ -13,9 +13,7 @@ Cupertino is a CLI for human developers and an MCP server for AI agents. Both su
 
 ![Cupertino Demo](docs/images/cupertino.gif)
 
-> **Latest: v1.4.0** (2026-06-21): refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to **363,562 documents / 308,118 symbols across 417 frameworks**, now including post-WWDC26 iOS 27 content, alongside the HIG, archive, Swift Evolution, Swift.org, Swift Book, package, and sample-code DBs (8 per-source databases, read-only rollback mode). [Release notes](https://github.com/mihaelamj/cupertino/releases/tag/v1.4.0) · [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
-
-> If Cupertino is useful to your work with Apple docs or AI agents, consider [sponsoring its development](https://github.com/sponsors/mihaelamj). Sponsorship helps keep releases, documentation, and the Apple/Linux tooling around it moving.
+> **Latest: v1.4.0** (2026-06-21): refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to **363,562 documents / 308,118 symbols across 417 frameworks**, now including post-WWDC26 iOS 27 content, alongside the HIG, archive, Swift Evolution, Swift.org, Swift Book, package, and sample-code DBs (8 per-source databases, read-only rollback mode). [Release notes](https://codeberg.org/CupertinoHQ/cupertino/src/tag/v1.4.0/CHANGELOG.md) · [CHANGELOG](CHANGELOG.md) · [Roadmap](#roadmap) · live dashboard at <https://cupertino.aleahim.com/>. Follow updates on X: [@cupertinomcp](https://x.com/cupertinomcp).
 
 ## What is Cupertino?
 
@@ -75,7 +73,7 @@ cupertino doctor                                 # check local database health
 cupertino serve                                  # start the MCP server (also the default command)
 ```
 
-Prefer to build the index yourself instead of downloading it? `cupertino save --remote` streams the corpus from GitHub and rebuilds locally, and `cupertino fetch --source <name>` crawls a single source from the original site. See [docs/commands/](docs/commands/) for every command, flag, and the slower self-hosted paths.
+Prefer to build the index yourself instead of downloading it? `cupertino fetch --source <name>` crawls a single source from the original site and rebuilds locally. See [docs/commands/](docs/commands/) for every command, flag, and the slower self-hosted paths.
 
 ### Two surfaces, one catalog
 
@@ -141,7 +139,7 @@ Claude Desktop, OpenAI Codex, Cursor, VS Code (Copilot), GitHub Copilot for Xcod
 - **Apple Developer Documentation** (~363,562 indexed pages): JavaScript-aware rendering via WKWebView, HTML-to-Markdown conversion, smart change detection
 - **Swift Evolution** (~429 proposals) and **Swift.org** (~501 pages): GitHub- and site-based fetching in Markdown
 - **Swift package metadata**: `packages.db` ships 185 packages with full source, stars, licenses, deployment-target platforms, and authored `swift-tools-version`
-- **Apple Sample Code** (619 projects, 18,000+ indexed Swift files): fetched from Apple's CDN or the GitHub mirror, full-text searchable
+- **Apple Sample Code** (619 projects, 18,000+ indexed Swift files): fetched from Apple's CDN, full-text searchable
 - **Apple Archive legacy guides** (~368 pages in v1.4.0): pre-2016 conceptual docs (Core Animation, Quartz 2D, Core Text); included in default fan-out with a lower rank weight, or searchable alone with `--source apple-archive`
 - **Human Interface Guidelines**: Apple's design guidelines across iOS, macOS, watchOS, visionOS, and tvOS
 
@@ -156,10 +154,10 @@ Claude Desktop, OpenAI Codex, Cursor, VS Code (Copilot), GitHub Copilot for Xcod
 ### Model Context Protocol server
 
 - **Resources**: direct page access via `apple-docs://{framework}/{page}`, `swift-evolution://{proposal-id}`, `hig://{category}/{page}`
-- **`search`**: unified full-text search across every indexed source. Parameters: `query` (required), `source`, `framework`, `language`, `include_archive`, `limit`, and the `min_ios`/`min_macos`/`min_tvos`/`min_watchos`/`min_visionos`/`min_swift` platform filters (AND-combined; malformed values are rejected at the boundary with a clear error frame). Replaces the pre-[#239](https://github.com/mihaelamj/cupertino/issues/239) per-source tools.
+- **`search`**: unified full-text search across every indexed source. Parameters: `query` (required), `source`, `framework`, `language`, `include_archive`, `limit`, and the `min_ios`/`min_macos`/`min_tvos`/`min_watchos`/`min_visionos`/`min_swift` platform filters (AND-combined; malformed values are rejected at the boundary with a clear error frame). Replaces the pre-#239 per-source tools.
 - **`list_frameworks`**, **`list_documents`**, **`list_children`**, **`read_document`** (`format`: `json` for agents, `markdown` for humans)
 - **Sample-code tools**: `list_samples`, `read_sample`, `read_sample_file`; pass `format=json` for typed project/file payloads
-- **AST-powered symbol tools** ([#81](https://github.com/mihaelamj/cupertino/issues/81)): `search_symbols`, `search_property_wrappers`, `search_concurrency`, `search_conformances`, `search_generics`, `get_inheritance`; pass `format=json` for typed symbol rows and title-bearing inheritance trees
+- **AST-powered symbol tools** (#81): `search_symbols`, `search_property_wrappers`, `search_concurrency`, `search_conformances`, `search_generics`, `get_inheritance`; pass `format=json` for typed symbol rows and title-bearing inheritance trees
 - **Desktop boundary**: desktop UI code consumes these backend/tool contracts. It must not open SQLite databases directly or duplicate Cupertino's read engine.
 
 See **[docs/tools/](docs/tools/)** for per-tool documentation.
@@ -218,10 +216,10 @@ Cupertino factors reusable, independently-versioned Swift packages out of the mo
 
 | Package | Repo | What it is |
 |---|---|---|
-| **SwiftMCPCore** | [mihaelamj/SwiftMCPCore](https://github.com/mihaelamj/SwiftMCPCore) | Neutral MCP wire types (the JSON-RPC + protocol value types). Not cupertino-specific; a general MCP building block. |
-| **SwiftMCPClient** | [mihaelamj/SwiftMCPClient](https://github.com/mihaelamj/SwiftMCPClient) | Neutral, transport-injectable MCP client (`Client.MCP` seam, `MCPClient` actor, subprocess transport). Depends on SwiftMCPCore. |
-| **CupertinoDataKit** | [mihaelamj/CupertinoDataKit](https://github.com/mihaelamj/CupertinoDataKit) | Cupertino's public **read contract**: documentation/source reading, document browsing, symbol/code-intelligence reading, and sample-code reading protocols plus every value type they return. Protocols + value types only, zero implementation; cupertino's engine conforms server-side, and an embedded/in-process reader (e.g. an iOS app) conforms a different implementation. Cupertino's foundation tier re-exports it (`@_exported import CupertinoDataKit`). |
-| **CupertinoDataEngine** | [mihaelamj/CupertinoDataEngine](https://github.com/mihaelamj/CupertinoDataEngine) | Cupertino's embedded **read-only backend facade** for app clients. The engine itself conforms to the public read/browse contracts and fans out across configured source, sample, and package readers. The current v0.2.6 slice keeps the opaque `Corpus` handle and aligns current-corpus opening with release bundles: sample code is opened through the sample reader, and packages stay on `packages.db`. UI code must not know the storage files exist. |
+| **SwiftMCPCore** | [Mihaela/SwiftMCPCore](https://codeberg.org/Mihaela/SwiftMCPCore) | Neutral MCP wire types (the JSON-RPC + protocol value types). Not cupertino-specific; a general MCP building block. |
+| **SwiftMCPClient** | [Mihaela/SwiftMCPClient](https://codeberg.org/Mihaela/SwiftMCPClient) | Neutral, transport-injectable MCP client (`Client.MCP` seam, `MCPClient` actor, subprocess transport). Depends on SwiftMCPCore. |
+| **CupertinoDataKit** | [CupertinoHQ/CupertinoDataKit](https://codeberg.org/CupertinoHQ/CupertinoDataKit) | Cupertino's public **read contract**: documentation/source reading, document browsing, symbol/code-intelligence reading, and sample-code reading protocols plus every value type they return. Protocols + value types only, zero implementation; cupertino's engine conforms server-side, and an embedded/in-process reader (e.g. an iOS app) conforms a different implementation. Cupertino's foundation tier re-exports it (`@_exported import CupertinoDataKit`). |
+| **CupertinoDataEngine** | [CupertinoHQ/CupertinoDataEngine](https://codeberg.org/CupertinoHQ/CupertinoDataEngine) | Cupertino's embedded **read-only backend facade** for app clients. The engine itself conforms to the public read/browse contracts and fans out across configured source, sample, and package readers. The current v0.2.6 slice keeps the opaque `Corpus` handle and aligns current-corpus opening with release bundles: sample code is opened through the sample reader, and packages stay on `packages.db`. UI code must not know the storage files exist. |
 
 See the current [CupertinoDataEngine wiring diagram](docs/architecture/cupertino-data-engine-wiring.html) for the boundary between `CupertinoDataEngine`, in-tree `CupertinoComposition`, and downstream app clients. Mobile catalog installation is documented in [docs/design/mobile-catalog-delivery.md](docs/design/mobile-catalog-delivery.md), including app storage and the `CatalogStore` contract.
 
@@ -251,7 +249,7 @@ flowchart LR
 
 ## Roadmap
 
-The canonical living roadmap is [#183](https://github.com/mihaelamj/cupertino/issues/183); the diagram below tracks epic progress at a glance.
+The canonical living roadmap is #183; the diagram below tracks epic progress at a glance.
 
 Status legend:
 
@@ -381,9 +379,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full build, test, and release wor
 
 ## Project status
 
-**Released: v1.4.0** (2026-06-21): a refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to 363,562 documents / 308,118 symbols (417 frameworks) and added post-WWDC26 iOS 27 content; the placeholder-stub rot is gone (every docs database now has a `docs_structured == docs_fts` population ratio of 1.000). The 8 per-source databases (introduced in v1.3.0) ship in rollback journal mode, so each opens read-only without an `-shm` sidecar and no query / read / serve connection can write or delete rows ([#1194](https://github.com/mihaelamj/cupertino/issues/1194)). `databaseVersion` is `1.4.0`; `cupertino setup` downloads `cupertino-databases-v1.4.0.zip` (876 MB) carrying 363,562 documents / 308,118 symbols in `apple-documentation.db` (2.7 GB, `user_version` 18), plus `packages.db` (1.2 GB, 185 packages), `apple-sample-code.db` (189 MB), and the HIG / archive / evolution / org / book databases.
+**Released: v1.4.0** (2026-06-21): a refreshed database bundle. A full re-crawl + clean rebuild grew the Apple documentation slice to 363,562 documents / 308,118 symbols (417 frameworks) and added post-WWDC26 iOS 27 content; the placeholder-stub rot is gone (every docs database now has a `docs_structured == docs_fts` population ratio of 1.000). The 8 per-source databases (introduced in v1.3.0) ship in rollback journal mode, so each opens read-only without an `-shm` sidecar and no query / read / serve connection can write or delete rows (#1194). `databaseVersion` is `1.4.0`; `cupertino setup` downloads `cupertino-databases-v1.4.0.zip` (876 MB) carrying 363,562 documents / 308,118 symbols in `apple-documentation.db` (2.7 GB, `user_version` 18), plus `packages.db` (1.2 GB, 185 packages), `apple-sample-code.db` (189 MB), and the HIG / archive / evolution / org / book databases.
 
-**Previously:** v1.2.1 (2026-05-23, maintenance + [Source Independence Day](https://github.com/mihaelamj/cupertino/issues/919)), v1.2.0 "ironclad" (2026-05-20, search-quality release: rank-1 accuracy on canonical-lookup queries 52% → 92%), v1.1.0 (2026-05-14), v1.0.2 (2026-05-11). Full history in [CHANGELOG.md](CHANGELOG.md).
+**Previously:** v1.2.1 (2026-05-23, maintenance + Source Independence Day (#919)), v1.2.0 "ironclad" (2026-05-20, search-quality release: rank-1 accuracy on canonical-lookup queries 52% → 92%), v1.1.0 (2026-05-14), v1.0.2 (2026-05-11). Full history in [CHANGELOG.md](CHANGELOG.md).
 
 - ✅ All core functionality working, all production bugs resolved at ship time
 - ✅ 3,122 runtime tests across 351 Swift test files (501 suites)
@@ -392,16 +390,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full build, test, and release wor
 
 ## Contributing
 
-Issues and pull requests are welcome, and I'd love to hear how you're using Cupertino with your AI workflow. For questions and discussion, use [GitHub Discussions](https://github.com/mihaelamj/cupertino/discussions).
+Issues and pull requests are welcome, and I'd love to hear how you're using Cupertino with your AI workflow. For questions and discussion, use [Codeberg Issues](https://codeberg.org/CupertinoHQ/cupertino/issues).
 
 I prefer collaboration over competition: if you're working on something similar, let's find ways to work together. Don't hesitate to submit a PR because of code style; I'd rather have your contribution than perfect formatting. By participating you agree to abide by the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/). For development setup, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Related repositories
 
-- **[cupertino-docs](https://github.com/mihaelamj/cupertino-docs)**: pre-built documentation archive for quick installation
-- **[cupertino-sample-code](https://github.com/mihaelamj/cupertino-sample-code)**: Apple sample-code repository mirror
-- **[cupertino-packages](https://github.com/mihaelamj/cupertino-packages)**: Swift package source corpus indexed into `packages.db`
-- **[cupertino-symbolgraphs](https://github.com/mihaelamj/cupertino-symbolgraphs)**: Apple SDK symbol-graph corpus, the source for the `apple-constraints.json` and `apple-conformances.json` enrichment tables
+- **[cupertino-symbolgraphs](https://codeberg.org/CupertinoHQ/cupertino-symbolgraphs)**: Apple SDK symbol-graph corpus, the source for the `apple-constraints.json` and `apple-conformances.json` enrichment tables
+- The crawled corpora (`cupertino-docs`, `cupertino-sample-code`, `cupertino-packages`) are no longer offered as hosted repositories. The data they carry ships as the prebuilt database bundle that `cupertino setup` downloads.
 
 ## License
 
@@ -409,8 +405,8 @@ MIT License, see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/mihaelamj/cupertino/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/mihaelamj/cupertino/discussions)
+- **Issues:** [Codeberg Issues](https://codeberg.org/CupertinoHQ/cupertino/issues)
+- **Questions and discussion:** [Codeberg Issues](https://codeberg.org/CupertinoHQ/cupertino/issues)
 
 ---
 
