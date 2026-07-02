@@ -5,7 +5,7 @@ import SearchModels
 @testable import SearchSQLite
 import Testing
 
-/// Regression suite for [#630](https://github.com/mihaelamj/cupertino/issues/630).
+/// Regression suite for #630.
 ///
 /// `fetchCanonicalTypePages` is the safety-net that probes
 /// `apple-docs://<fw>/<query>` for each of `swift` / `swiftui` /

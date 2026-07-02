@@ -4,7 +4,7 @@ import Foundation
 import SharedConstants
 import Testing
 
-/// Regression suite for [#274](https://github.com/mihaelamj/cupertino/issues/274).
+/// Regression suite for #274.
 ///
 /// Pre-fix, `AppleJSONToMarkdown.toStructuredPage` walked the
 /// `relationshipsSections` and assigned three of the four common

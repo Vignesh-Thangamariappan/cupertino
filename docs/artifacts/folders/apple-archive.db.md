@@ -1,12 +1,12 @@
 # apple-archive.db - Apple Archive FTS5 Index
 
-Per-source SQLite FTS5 database for Apple Archive. One of the eight per-source databases produced by the v1.3.0 split of the former unified `search.db` ([#1036](https://github.com/mihaelamj/cupertino/issues/1036)).
+Per-source SQLite FTS5 database for Apple Archive. One of the eight per-source databases produced by the v1.3.0 split of the former unified `search.db` (#1036).
 
 ## Location
 
 **Default**: `~/.cupertino/apple-archive.db`
 
-Ships in rollback (`journal=delete`) mode ([#1192](https://github.com/mihaelamj/cupertino/issues/1192)): it opens read-only with no `-wal` / `-shm` sidecar, so the file is self-contained for copy and distribution. Bundled in `cupertino-databases-v<version>.zip` and installed by `cupertino setup`. Every query / read / serve connection opens it read-only ([#1194](https://github.com/mihaelamj/cupertino/issues/1194)).
+Ships in rollback (`journal=delete`) mode (#1192): it opens read-only with no `-wal` / `-shm` sidecar, so the file is self-contained for copy and distribution. Bundled in `cupertino-databases-v<version>.zip` and installed by `cupertino setup`. Every query / read / serve connection opens it read-only (#1194).
 
 ## Contents
 
@@ -28,4 +28,4 @@ Shares the documentation FTS5 schema with the other per-source docs databases: t
 
 - [Artifacts index](README.md)
 - [database architecture reference](../../architecture/database.md) - full schema, BM25F weights, enrichment passes
-- Per-source split rationale: [#1036](https://github.com/mihaelamj/cupertino/issues/1036)
+- Per-source split rationale: #1036

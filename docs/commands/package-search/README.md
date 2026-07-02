@@ -2,7 +2,7 @@
 
 Smart query over the packages index (packages source only).
 
-> **Hidden command.** `package-search` is functional but does **not** show up in `cupertino --help`. It exists as a focused entry point against `packages.db` only. For a unified surface across docs + samples + HIG + packages + Swift Evolution / Swift.org / Swift Book, use [`search`](../search/) (the default fan-out mode replaces what was `cupertino ask` pre-1.0; see [#239](https://github.com/mihaelamj/cupertino/issues/239)).
+> **Hidden command.** `package-search` is functional but does **not** show up in `cupertino --help`. It exists as a focused entry point against `packages.db` only. For a unified surface across docs + samples + HIG + packages + Swift Evolution / Swift.org / Swift Book, use [`search`](../search/) (the default fan-out mode replaces what was `cupertino ask` pre-1.0; see #239).
 
 ## Synopsis
 
@@ -23,7 +23,7 @@ Use it when you want results from `packages.db` only and want to bypass the mult
 | `<question>` (positional, required) | Plain-text question |
 | `--limit` | Max number of chunks to return. Default `3`. |
 | `--db` | Override `packages.db` path. Defaults to the configured packages database. |
-| `--platform` | Restrict to packages whose declared deployment target is compatible with the named platform. Values: `iOS`, `macOS`, `tvOS`, `watchOS`, `visionOS` (case-insensitive). Requires `--min-version`. ([#220](https://github.com/mihaelamj/cupertino/issues/220)) |
+| `--platform` | Restrict to packages whose declared deployment target is compatible with the named platform. Values: `iOS`, `macOS`, `tvOS`, `watchOS`, `visionOS` (case-insensitive). Requires `--min-version`. (#220) |
 | `--min-version` | Minimum version for `--platform`, e.g. `16.0` / `13.0` / `10.15`. Lexicographic compare in SQL, works for current Apple platform versions. |
 | `--swift-tools` | Restrict to packages whose authored `// swift-tools-version: X.Y` declaration is at or above the requested Swift compiler floor, e.g. `5.9` or `6.0`. |
 
@@ -52,7 +52,7 @@ cupertino package-search "json codable" --platform iOS --min-version 13.0
 
 ## Relationship to `search`
 
-`search` (in its default fan-out mode) and `package-search` share the `SmartQuery` core. The default `cupertino search "<question>"` runs every available `CandidateFetcher` in parallel and fuses the rankings; `package-search` runs only `PackageFTSCandidateFetcher`. Ranking tweaks land in one place because both go through `SmartQuery`. Pre-1.0, the fan-out was a separate `cupertino ask` command; it was absorbed into `search` in [#239](https://github.com/mihaelamj/cupertino/issues/239).
+`search` (in its default fan-out mode) and `package-search` share the `SmartQuery` core. The default `cupertino search "<question>"` runs every available `CandidateFetcher` in parallel and fuses the rankings; `package-search` runs only `PackageFTSCandidateFetcher`. Ranking tweaks land in one place because both go through `SmartQuery`. Pre-1.0, the fan-out was a separate `cupertino ask` command; it was absorbed into `search` in #239.
 
 ## See Also
 

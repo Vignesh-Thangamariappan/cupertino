@@ -16,7 +16,7 @@ Pure post-process by default: no network calls, no recrawl. Markers that point t
 
 `--use-network` and `--use-webview` opt into a second pass that fetches titles for the leftover markers.
 
-Tracked in [#208](https://github.com/mihaelamj/cupertino/issues/208).
+Tracked in #208.
 
 ## Options
 
@@ -64,4 +64,4 @@ cupertino resolve-refs --input ~/.cupertino/docs --print-unresolved
 ## See Also
 
 - [fetch](../fetch/), the upstream command whose `--discovery-mode json-only` output this command rewrites
-- [#208](https://github.com/mihaelamj/cupertino/issues/208), design and motivation
+- #208, design and motivation

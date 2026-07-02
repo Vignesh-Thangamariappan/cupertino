@@ -11,7 +11,7 @@ cupertino save --source apple-docs -y
 
 ## Description
 
-`cupertino save` prints a per-scope preflight summary (sources present, availability sidecar coverage, etc.) and prompts `Continue? [Y/n]` before any DB write. `--yes` / `-y` skips the prompt and proceeds. ([#232](https://github.com/mihaelamj/cupertino/issues/232))
+`cupertino save` prints a per-scope preflight summary (sources present, availability sidecar coverage, etc.) and prompts `Continue? [Y/n]` before any DB write. `--yes` / `-y` skips the prompt and proceeds. (#232)
 
 The prompt is also auto-skipped when stdin isn't a TTY (CI / pipes), so this flag is only needed for interactive shells where you want to bypass the prompt.
 

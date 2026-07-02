@@ -5,7 +5,7 @@ import SearchModels
 @testable import SearchSQLite
 import Testing
 
-/// Regression-pin for [#610](https://github.com/mihaelamj/cupertino/issues/610)
+/// Regression-pin for #610
 /// + main's 2026-05-16 post-v1.2.0-reindex audit (15-canonical-type set).
 ///
 /// `CanonicalTypeRankingTests` covers 7 of the 15 main verified (URL,

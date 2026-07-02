@@ -10,7 +10,7 @@ cupertino save --source samples --samples-db <path>
 
 ## Description
 
-Override the default `~/.cupertino/apple-sample-code.db` location. ([#231](https://github.com/mihaelamj/cupertino/issues/231))
+Override the default `~/.cupertino/apple-sample-code.db` location. (#231)
 
 ## Default
 

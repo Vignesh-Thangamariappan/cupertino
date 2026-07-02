@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#607](https://github.com/mihaelamj/cupertino/issues/607).
+/// Regression suite for #607.
 ///
 /// Pre-#607, `Search.Index.indexDocument(_:)` callers that passed
 /// `jsonData: nil` (the string-content strategies — `Search.Strategies.SwiftEvolution`,

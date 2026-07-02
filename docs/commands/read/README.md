@@ -200,5 +200,5 @@ Each backend has its own missing-DB error pointing at `cupertino setup` or the r
 
 ## History
 
-- [#239](https://github.com/mihaelamj/cupertino/issues/239) follow-up: unified across docs / samples / packages. Pre-#239 this command only resolved docs URIs.
+- #239 follow-up: unified across docs / samples / packages. Pre-#239 this command only resolved docs URIs.
 - Logic moved to `Services/Commands/ReadService.swift` so MCP tools and CLI share one implementation.

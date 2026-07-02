@@ -10,7 +10,7 @@ cupertino save --remote
 
 ## Description
 
-The `--remote` flag enables **instant setup** by streaming pre-crawled documentation directly from the [cupertino-docs](https://github.com/mihaelamj/cupertino-docs) GitHub repository into the search database.
+The `--remote` flag enables **instant setup** by streaming pre-crawled documentation directly from the cupertino-docs GitHub repository into the search database.
 
 ### Key Features
 
@@ -100,4 +100,4 @@ When using `--remote`, these options change behavior:
 ## Related
 
 - [save command](../../README.md)
-- [cupertino-docs repo](https://github.com/mihaelamj/cupertino-docs)
+- cupertino-docs repo

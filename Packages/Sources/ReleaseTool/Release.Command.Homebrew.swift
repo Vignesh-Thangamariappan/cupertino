@@ -141,7 +141,7 @@ extension Release.Command {
 
         private func cloneTap() throws -> URL {
             let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent("homebrew-tap-\(UUID().uuidString)")
-            try Release.Shell.run("git clone https://github.com/mihaelamj/homebrew-tap.git \(tempDir.path)")
+            try Release.Shell.run("git clone https://codeberg.org/CupertinoHQ/homebrew-tap.git \(tempDir.path)")
             return tempDir
         }
 

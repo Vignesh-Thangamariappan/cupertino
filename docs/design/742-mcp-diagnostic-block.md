@@ -178,7 +178,7 @@ This revises the #742 body's "ship as one PR" claim: Phase 0 is a separate, upst
 
 Status: design only (2026-06-02). Not started. Gated on Phase 0 (SwiftMCPCore extension + release).
 
-- Issue: [#742](https://github.com/mihaelamj/cupertino/issues/742). Parent epic [#268](https://github.com/mihaelamj/cupertino/issues/268). Dependents: #10, #13, #21, #70, #271, #517.
+- Issue: #742. Parent epic #268. Dependents: #10, #13, #21, #70, #271, #517.
 - Migrates: #226 / #640 / #645 prose signals; PR #731 is the POC site (`Search.PlatformFilterScope`).
 - Upstream: `mihaelamj/SwiftMCPCore` (the external wire-type package, pinned `0.1.0`).
 - Spec: MCP 2025-11-25; RFC #371 (`outputSchema` + `structuredContent`); SEP-1624 (`structuredContent` vs `content`).

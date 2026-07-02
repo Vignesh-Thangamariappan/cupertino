@@ -40,7 +40,7 @@ The Homebrew formula installs one binary called `cupertino`. The
 binary alone does nothing useful; it knows how to query an index
 but has no data. The user runs `cupertino setup` once, which
 downloads three SQLite files from
-`github.com/mihaelamj/cupertino-docs/releases/download/v<version>/cupertino-databases-v<version>.zip`
+`https://cupertino-assets.fly.dev/releases/v<version>/cupertino-databases-v<version>.zip` (GitHub-era releases path retired)
 and unpacks them into `~/.cupertino/`. Those three files are the
 ENTIRE shipped corpus.
 
@@ -125,7 +125,7 @@ disk:
 /Volumes/Code/DeveloperExt/public/cupertino-symbolgraphs/
 ```
 
-It is its own repo at `github.com/mihaelamj/cupertino-symbolgraphs`.
+It is its own repo at `codeberg.org/CupertinoHQ/cupertino-symbolgraphs`.
 Its sole product is a binary called `cupertino-symbolgraphs-gen`
 which:
 

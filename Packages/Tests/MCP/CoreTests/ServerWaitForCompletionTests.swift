@@ -2,7 +2,7 @@ import Foundation
 @testable import MCPCore
 import Testing
 
-// Regression suite for [#618](https://github.com/mihaelamj/cupertino/issues/618)
+// Regression suite for #618
 // — `cupertino serve` must exit when its transport's `messages` stream
 // finishes. The fix added `MCP.Core.Server.waitForCompletion()` which
 // awaits the server's internal `messageTask`. `processMessages` ends

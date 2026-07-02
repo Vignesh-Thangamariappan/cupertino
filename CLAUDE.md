@@ -2,28 +2,28 @@
 
 ## Active focus
 
-[#183](https://github.com/mihaelamj/cupertino/issues/183), bugs → recrawl → vector → tutor (canonical roadmap, update on every release/epic/scope change per its built-in protocol).
+#183, bugs → recrawl → vector → tutor (canonical roadmap, update on every release/epic/scope change per its built-in protocol).
 
-Latest release: **v1.4.0 (2026-06-21)**, the refreshed-database-bundle release: a full re-crawl + clean rebuild grew `apple-documentation.db` to 363,562 docs / 308,118 symbols (417 frameworks) with post-WWDC26 iOS 27 content, and the placeholder-stub rot is gone (every docs DB has a `docs_structured == docs_fts` ratio of 1.000; the new `scripts/check-db-quality.sh` gate enforces it). Physical layout is unchanged from v1.3.0 (8 per-source DBs, read-only rollback mode, schema v18 / packages v5), so this is a content + version bump, not a schema change. `databaseVersion` and CLI version are `1.4.0` (`cupertino setup` downloads `cupertino-databases-v1.4.0.zip`, 876 MB, 8 rollback-mode DBs). Prior releases: **v1.3.0 (2026-05-31)** (per-source DB split + read-only databases, #1194), **v1.2.1 (2026-05-23)** (maintenance), and **v1.2.0 "ironclad" (2026-05-20)** (search quality). Live search-quality dashboard: https://cupertino.aleahim.com/. Live bug list: https://github.com/mihaelamj/cupertino/issues?q=is%3Aopen+is%3Aissue+label%3Abug.
+Latest release: **v1.4.0 (2026-06-21)**, the refreshed-database-bundle release: a full re-crawl + clean rebuild grew `apple-documentation.db` to 363,562 docs / 308,118 symbols (417 frameworks) with post-WWDC26 iOS 27 content, and the placeholder-stub rot is gone (every docs DB has a `docs_structured == docs_fts` ratio of 1.000; the new `scripts/check-db-quality.sh` gate enforces it). Physical layout is unchanged from v1.3.0 (8 per-source DBs, read-only rollback mode, schema v18 / packages v5), so this is a content + version bump, not a schema change. `databaseVersion` and CLI version are `1.4.0` (`cupertino setup` downloads `cupertino-databases-v1.4.0.zip`, 876 MB, 8 rollback-mode DBs). Prior releases: **v1.3.0 (2026-05-31)** (per-source DB split + read-only databases, #1194), **v1.2.1 (2026-05-23)** (maintenance), and **v1.2.0 "ironclad" (2026-05-20)** (search quality). Live search-quality dashboard: https://cupertino.aleahim.com/. Live bug list: https://codeberg.org/CupertinoHQ/cupertino/issues?q=is%3Aopen+is%3Aissue+label%3Abug.
 
 Release archive (per-version notes, audits, McNemar diffs, bundle-rebuild details) lives in `CHANGELOG.md` and `docs/audits/`. Do not reproduce it here.
 
 ## Source Independence Day (active, post-#931)
 
-**Each content source must be 100% pluggable, not 80% with caveats.** Adding a new source (WWDC transcripts [#58](https://github.com/mihaelamj/cupertino/issues/58), Swift Forums [#89](https://github.com/mihaelamj/cupertino/issues/89), Tech Talks [#273](https://github.com/mihaelamj/cupertino/issues/273), any future source) must be a PR that touches no existing source concrete, no static registry dictionary, no closed enum. Same standard for databases: adding a new DB is one `Distribution.DatabaseHealthCheck` conformer + one list append.
+**Each content source must be 100% pluggable, not 80% with caveats.** Adding a new source (WWDC transcripts #58, Swift Forums #89, Tech Talks #273, any future source) must be a PR that touches no existing source concrete, no static registry dictionary, no closed enum. Same standard for databases: adding a new DB is one `Distribution.DatabaseHealthCheck` conformer + one list append.
 
 **The axiom, stated as a rule to read every session:** a new source touches **no existing source concrete, no static registry dictionary, no closed enum, no central switch**. A closed enum is allowed only when a new source *reuses* its cases without adding one.
 
 **Corollary (guards and preflights):** any "this source needs input file X" rule (missing `apple-constraints.json`, missing per-package `availability.json`, any future enrichment input) must be a declaration the source *carries* (`SourceDefinition.requiredEnrichmentInputs`), enforced by ONE generic composition-root preflight iterating every active source. A literal-filename `if` in central save logic is a per-source edit-point, i.e. an axiom violation. Never add a hardcoded per-source guard; express it declaratively. (The producer tool `cupertino-constraints-gen` is axiom-neutral: not a content source, so a localized guard there is fine.)
 
-This is the load-bearing goal of the [#919](https://github.com/mihaelamj/cupertino/issues/919) declarative source + DB pluggability epic. Do not declare any plug-in / descriptor / registry refactor "done" until the end-to-end 2-file PR claim is empirically proven.
+This is the load-bearing goal of the #919 declarative source + DB pluggability epic. Do not declare any plug-in / descriptor / registry refactor "done" until the end-to-end 2-file PR claim is empirically proven.
 
 **Ordered critical path** (full doc at `docs/plans/2026-05-22-source-independence-day.md`):
 
-1. **[#932](https://github.com/mihaelamj/cupertino/issues/932)**: `IndexerRegistry` composition-root injection (drops the `SearchSQLite/Search.SourceIndexer.swift` static dict)
-2. **[#933](https://github.com/mihaelamj/cupertino/issues/933)**: `Search.makeDefaultStrategies` factory dissolved (drops `SearchStrategies` as a per-source edit-point)
-3. **[#934](https://github.com/mihaelamj/cupertino/issues/934)**: `Search.SourceRegistry.all` dissolved into composition-root `[Search.SourceDefinition]`
-4. **[#935](https://github.com/mihaelamj/cupertino/issues/935)**: end-to-end TDD scenario with a fake source proving the 2-file PR claim
+1. **#932**: `IndexerRegistry` composition-root injection (drops the `SearchSQLite/Search.SourceIndexer.swift` static dict)
+2. **#933**: `Search.makeDefaultStrategies` factory dissolved (drops `SearchStrategies` as a per-source edit-point)
+3. **#934**: `Search.SourceRegistry.all` dissolved into composition-root `[Search.SourceDefinition]`
+4. **#935**: end-to-end TDD scenario with a fake source proving the 2-file PR claim
 
 Done so far (will not re-edit per new source): `SourcePrefix.*` constants (#923/#925/#926); `Search.Source` open struct (#924); `DatabaseDescriptor` value type (#920); `Distribution.SetupService.Outcome` descriptor-keyed list (#921); `Doctor.printSchemaVersions` descriptor-keyed iteration (#922); `Distribution.DatabaseHealthCheck` strategy seam covering Doctor's 3 sibling per-DB sections (#931).
 

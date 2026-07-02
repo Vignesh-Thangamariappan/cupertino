@@ -38,22 +38,22 @@ expect "clean tree passes" 0 "$G"
 
 # PR #1294 exactly: fork URL repointed in the package lockfile only.
 R1=$(mkfixture)
-sed -i.bak 's#github.com/mihaelamj/SwiftMCPCore#github.com/KartavyaDikshit/SwiftMCPCore#' "$R1/Packages/Package.resolved"
+sed -i.bak 's#codeberg.org/Mihaela/SwiftMCPCore#github.com/KartavyaDikshit/SwiftMCPCore#' "$R1/Packages/Package.resolved"
 expect "fork URL in package lockfile fails" 1 "$R1"
 
 # One-sided repoint to a still-allowlisted owner: allowlist (A/B) passes, drift (C) catches it.
 R2=$(mkfixture)
-sed -i.bak 's#github.com/mihaelamj/SwiftMCPCore#github.com/apple/SwiftMCPCore#' "$R2/Packages/Package.resolved"
+sed -i.bak 's#codeberg.org/Mihaela/SwiftMCPCore#github.com/apple/SwiftMCPCore#' "$R2/Packages/Package.resolved"
 expect "one-sided lockfile drift fails" 1 "$R2"
 
 # Fork URL in the manifest itself.
 R3=$(mkfixture)
-sed -i.bak 's#github.com/mihaelamj/SwiftMCPCore#github.com/KartavyaDikshit/SwiftMCPCore#' "$R3/Packages/Package.swift"
+sed -i.bak 's#codeberg.org/Mihaela/SwiftMCPCore#github.com/KartavyaDikshit/SwiftMCPCore#' "$R3/Packages/Package.swift"
 expect "fork URL in manifest fails" 1 "$R3"
 
 # Casing cannot smuggle a fork past the allowlist.
 R4=$(mkfixture)
-sed -i.bak 's#github.com/mihaelamj/SwiftMCPCore#github.com/Apple-Mirror/SwiftMCPCore#' "$R4/Packages/Package.resolved"
+sed -i.bak 's#codeberg.org/Mihaela/SwiftMCPCore#github.com/Apple-Mirror/SwiftMCPCore#' "$R4/Packages/Package.resolved"
 expect "lookalike owner fails" 1 "$R4"
 
 echo "── $pass passed, $fails failed ──"

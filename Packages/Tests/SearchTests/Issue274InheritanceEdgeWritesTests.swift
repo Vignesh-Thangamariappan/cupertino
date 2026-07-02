@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#274](https://github.com/mihaelamj/cupertino/issues/274)
+/// Regression suite for #274
 /// follow-up — URI resolution + indexer writes to the `inheritance` table.
 ///
 /// The first PR landed the schema (v15) + JSON extraction of titles. This

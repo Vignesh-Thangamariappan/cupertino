@@ -7,7 +7,7 @@ import SampleIndexSQLite
 import SharedConstants
 import Testing
 
-/// Regression suite for [#1130](https://github.com/mihaelamj/cupertino/issues/1130).
+/// Regression suite for #1130.
 ///
 /// `cupertino search --source samples --min-ios N` silently dropped the
 /// platform filter: `CLIImpl.Command.Search.SourceRunners.runSampleSearch`

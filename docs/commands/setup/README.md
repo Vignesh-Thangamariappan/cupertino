@@ -14,11 +14,11 @@ The `setup` command downloads pre-built databases from GitHub Releases, providin
 
 This is the **fastest way to get started** with Cupertino.
 
-Every database ships in a single bundle from the [`cupertino-docs`](https://github.com/mihaelamj/cupertino-docs) releases (`cupertino-databases-vX.zip`). One download, one extract, every database on disk. (Earlier releases split `packages.db` into a separate companion repo; that proved to be needless complexity and is gone as of v1.0.0.)
+Every database ships in a single bundle from the `cupertino-docs` releases (`cupertino-databases-vX.zip`). One download, one extract, every database on disk. (Earlier releases split `packages.db` into a separate companion repo; that proved to be needless complexity and is gone as of v1.0.0.)
 
 ## What Gets Downloaded
 
-A single zip from the [`cupertino-docs`](https://github.com/mihaelamj/cupertino-docs) GitHub Releases (`cupertino-databases-vX.zip`) containing every per-source database. Exact contents vary by release; the v1.3.0 bundle ships:
+A single zip from the `cupertino-docs` GitHub Releases (`cupertino-databases-vX.zip`) containing every per-source database. Exact contents vary by release; the v1.3.0 bundle ships:
 
 | Database | Contents | Size |
 |----------|----------|------|

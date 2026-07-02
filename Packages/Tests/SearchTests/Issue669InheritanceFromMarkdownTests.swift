@@ -7,7 +7,7 @@ import SharedConstants
 import SQLite3
 import Testing
 
-/// Regression suite for [#669](https://github.com/mihaelamj/cupertino/issues/669) —
+/// Regression suite for #669 —
 /// inheritance fallback that re-derives `inheritsFromURIs` and
 /// `inheritedByURIs` from `StructuredDocumentationPage.rawMarkdown` when the
 /// dedicated arrays are nil on a stale corpus.

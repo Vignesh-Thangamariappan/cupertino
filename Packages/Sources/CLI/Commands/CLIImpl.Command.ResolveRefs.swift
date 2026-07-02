@@ -28,7 +28,7 @@ extension CLIImpl.Command {
             Markers pointing to pages no other page references will be left
             intact and reported in the unresolved-markers report.
 
-            See https://github.com/mihaelamj/cupertino/issues/208
+            See #208
             """
         )
 

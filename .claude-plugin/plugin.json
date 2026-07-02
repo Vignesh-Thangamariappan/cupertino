@@ -4,9 +4,9 @@
   "description": "Search and read Apple developer documentation offline, including SwiftUI, UIKit, Foundation, and 300+ frameworks.",
   "author": {
     "name": "mihaelamj",
-    "url": "https://github.com/mihaelamj"
+    "url": "https://aleahim.com"
   },
-  "repository": "https://github.com/mihaelamj/cupertino",
+  "repository": "https://codeberg.org/CupertinoHQ/cupertino",
   "license": "MIT",
   "keywords": ["apple", "documentation", "swiftui", "uikit", "ios", "macos", "swift"]
 }

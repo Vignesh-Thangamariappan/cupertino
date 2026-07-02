@@ -271,7 +271,7 @@ struct PluggabilityInvariantTests {
         //      one `registry.register(<X>Source())` line
         //
         // PLUS pre-existing closed-set edit sites (Independence Day
-        // epic, tracked at github.com/mihaelamj/cupertino issues
+        // epic, tracked at codeberg.org/CupertinoHQ/cupertino issues
         // #932/#933/#934/#935; NOT closed by this branch):
         //
         //   c. Search.FetchInfo.DefaultOutputDirKey closed enum +

@@ -475,7 +475,7 @@ def render(doc_path: Path, docs_root: Path, dashboards_dir: Path) -> Path:
         eyebrow = "cupertino docs"
     eyebrow = eyebrow.replace("-", " ").title()
 
-    gh_url = f"https://github.com/mihaelamj/cupertino/blob/main/docs/{doc_path.relative_to(docs_root)}"
+    gh_url = f"https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/docs/{doc_path.relative_to(docs_root)}"
 
     has_mermaid = '<pre class="mermaid">' in "".join(section_blocks)
     mermaid_script = MERMAID_BOOTSTRAP if has_mermaid else ""

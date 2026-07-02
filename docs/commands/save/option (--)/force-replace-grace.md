@@ -54,4 +54,4 @@ Only when you've already confirmed the sibling is stuck (e.g. via `ps -p <pid>` 
 
 - [`--force-replace`](force-replace.md), the flag this option configures
 - [`--yes`](yes.md), bypass the typed-confirmation gate (orthogonal to grace)
-- Issue [#722](https://github.com/mihaelamj/cupertino/issues/722), why the grace window is configurable
+- Issue #722, why the grace window is configurable

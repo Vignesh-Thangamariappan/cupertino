@@ -109,4 +109,4 @@ ReleaseTool/
 ## See Also
 
 - [docs/DEPLOYMENT.md](../../../docs/DEPLOYMENT.md) - Full release documentation
-- [Issue #98](https://github.com/mihaelamj/cupertino/issues/98) - Original feature request
+- Issue #98 (#98) - Original feature request

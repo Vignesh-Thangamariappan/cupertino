@@ -125,24 +125,24 @@ let deps: [Package.Dependency] = [
     .package(url: "https://github.com/swiftlang/swift-syntax", from: "600.0.0"),
     // External (#1167): the extracted, neutral MCP wire core (the SwiftMCPCore module).
     // URL dep pinned to the SwiftMCPCore v0.1.0 tag (repo renamed from swift-mcp-core; old URL redirects).
-    .package(url: "https://github.com/mihaelamj/SwiftMCPCore.git", from: "0.1.0"),
+    .package(url: "https://codeberg.org/Mihaela/SwiftMCPCore.git", from: "0.1.0"),
     // External: the extracted MCP server runtime (Server actor, Transport, provider
     // seams), lifted out of Sources/MCP. Re-exports SwiftMCPCore, so consumers that
     // import MCPCore still see MCP.Core.Protocols.* and the runtime through one edge.
     // Pinned .exact so this extraction is byte-identical to the prior in-tree code:
     // 0.2.0 is additive but changes `ping` (methodNotFound -> empty result). Adopt it
     // deliberately in a follow-up, not implicitly via a `from:` float.
-    .package(url: "https://github.com/mihaelamj/SwiftMCPServer.git", exact: "0.1.0"),
+    .package(url: "https://codeberg.org/Mihaela/SwiftMCPServer.git", exact: "0.1.0"),
     // External (#1172): the neutral, transport-injectable MCP client. MockAIAgent
     // consumes its `Client.MCP` seam over a subprocess channel. Depends on
     // SwiftMCPCore (resolves the same 0.1.0 pin, one node in the graph).
-    .package(url: "https://github.com/mihaelamj/SwiftMCPClient.git", from: "0.1.0"),
+    .package(url: "https://codeberg.org/Mihaela/SwiftMCPClient.git", from: "0.1.0"),
     // CupertinoDataKit — cupertino's public read contract (protocols + value
     // types, Foundation-only, zero-dep). v0.3.0 adds the package-search reader
     // slice used by native UI clients. Owned + published by cupertino;
     // SharedConstants re-exports it so every target sees the Search + Sample
     // namespaces with no per-target import edit.
-    .package(url: "https://github.com/mihaelamj/CupertinoDataKit.git", from: "0.3.0"),
+    .package(url: "https://codeberg.org/CupertinoHQ/CupertinoDataKit.git", from: "0.3.0"),
     // External embedded engine facade. v0.2.0 adds the
     // composed Search.Database facade that fans out across configured corpora;
     // v0.2.1 adds a public empty facade initializer for downstream previews/tests.
@@ -157,7 +157,7 @@ let deps: [Package.Dependency] = [
     // SchemaVersions composition APIs, unchanged in 0.2.7, so this is a consistency bump).
     // v0.2.8 lists topic-group children for the documentation tree (#50): the MCP list_children
     // tool now delegates to the engine so the server and the embedded apps share one parser.
-    .package(url: "https://github.com/mihaelamj/CupertinoDataEngine.git", from: "0.2.8"),
+    .package(url: "https://codeberg.org/CupertinoHQ/CupertinoDataEngine.git", from: "0.2.8"),
 ]
 
 // -------------------------------------------------------------

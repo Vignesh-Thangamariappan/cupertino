@@ -351,7 +351,7 @@ Read a specific source file from a sample project.
 
 ## AST Symbol Tools
 
-If a search index is available, the server also provides these AST-derived symbol tools (added in [#948](https://github.com/mihaelamj/cupertino/issues/948)). Each mirrors a `cupertino search-*` / `cupertino inheritance` CLI command. The five `min_*` platform filters AND-combine and apply to sources whose data carries availability metadata.
+If a search index is available, the server also provides these AST-derived symbol tools (added in #948). Each mirrors a `cupertino search-*` / `cupertino inheritance` CLI command. The five `min_*` platform filters AND-combine and apply to sources whose data carries availability metadata.
 
 ### search_symbols
 

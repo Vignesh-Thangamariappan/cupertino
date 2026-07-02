@@ -264,7 +264,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/mihaelamj/cupertino/main/inst
 ### 3. Build from Source
 
 ```bash
-git clone https://github.com/mihaelamj/cupertino.git
+git clone https://codeberg.org/CupertinoHQ/cupertino.git
 cd cupertino
 make build
 sudo make install
@@ -277,9 +277,9 @@ cupertino setup
 
 | Repository | Purpose |
 |------------|---------|
-| [mihaelamj/cupertino](https://github.com/mihaelamj/cupertino) | Main CLI source code |
-| [mihaelamj/cupertino-docs](https://github.com/mihaelamj/cupertino-docs) | Pre-built per-source databases bundle |
-| [mihaelamj/homebrew-tap](https://github.com/mihaelamj/homebrew-tap) | Homebrew formula |
+| [mihaelamj/cupertino](https://codeberg.org/CupertinoHQ/cupertino) | Main CLI source code |
+| mihaelamj/cupertino-docs | Pre-built per-source databases bundle |
+| [mihaelamj/homebrew-tap](https://codeberg.org/CupertinoHQ/homebrew-tap) | Homebrew formula |
 
 ---
 
@@ -297,7 +297,7 @@ The `cupertino-rel databases` command uses the version from `Constants.swift` to
 
 ### GitHub Actions Build Failed
 
-Check the [Actions tab](https://github.com/mihaelamj/cupertino/actions) for logs.
+Check the CI logs (GitHub-era Actions retired) for logs.
 
 ### databases: Not Found
 

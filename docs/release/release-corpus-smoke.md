@@ -1,6 +1,6 @@
 # Release Corpus Smoke
 
-Issue: [#1269](https://github.com/mihaelamj/cupertino/issues/1269)
+Issue: #1269
 
 This is the on-demand promotion gate for proving that the current checkout's
 `cupertino` binary still works against an already prepared release corpus, such

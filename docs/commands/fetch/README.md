@@ -44,14 +44,14 @@ The `fetch` command is the unified fetching command that handles both web crawli
 - [--start-clean](start-clean.md) - Ignore any saved session and start fresh from the seed URL
 - `--retry-errors` - Re-queue URLs that errored before save (visited but missing from the pages dict). Use after a filename or save bug is fixed to retry the affected pages without re-crawling the whole corpus.
 - `--baseline <path>` - Path to a known-good baseline corpus directory (e.g. a prior `cupertino-docs/docs` snapshot). On startup, URLs present in the baseline but missing from the current crawl's known set are prepended to the queue so the resumed crawl recovers gaps without a full recrawl. Path comparison is case-insensitive.
-- `--urls <path>` - Path to a text file containing one URL per line. Each URL is enqueued at depth 0; the crawler follows links from each up to `--max-depth`. Set `--max-depth 0` to fetch only the listed URLs with no descent. Useful for fetching a fixed list of URLs another corpus has but this one is missing, without re-spidering. Lines starting with `#` and blank lines are ignored. ([#210](https://github.com/mihaelamj/cupertino/issues/210))
-- `--discovery-mode <mode>` - Discovery mode for the docs crawler. Values: `auto` (default; JSON API primary, WKWebView fallback when JSON returns 404), `json-only` (JSON API only, no fallback. Fastest, narrowest), `webview-only` (WKWebView for everything. Slowest, broadest discovery, matches pre-2025-11-30 behavior). ([#208](https://github.com/mihaelamj/cupertino/issues/208))
+- `--urls <path>` - Path to a text file containing one URL per line. Each URL is enqueued at depth 0; the crawler follows links from each up to `--max-depth`. Set `--max-depth 0` to fetch only the listed URLs with no descent. Useful for fetching a fixed list of URLs another corpus has but this one is missing, without re-spidering. Lines starting with `#` and blank lines are ignored. (#210)
+- `--discovery-mode <mode>` - Discovery mode for the docs crawler. Values: `auto` (default; JSON API primary, WKWebView fallback when JSON returns 404), `json-only` (JSON API only, no fallback. Fastest, narrowest), `webview-only` (WKWebView for everything. Slowest, broadest discovery, matches pre-2025-11-30 behavior). (#208)
 - [--sosumi-base-url](option%20%28--%29/sosumi-base-url.md) - Optional Sosumi HTTP API base URL (for example `https://sosumi.ai` or a self-hosted instance). When set, web crawls fetch rendered Markdown responses instead of using the WKWebView fetcher.
 - `--only-accepted` / `--no-only-accepted` - Only download accepted/implemented proposals (`swift-evolution` source only). On by default; use `--no-only-accepted` to include drafts and rejected proposals.
 
 #### HTML link augmentation in `--discovery-mode auto` (v1.0.2+)
 
-In `auto` mode, after a successful JSON API fetch, the crawler additionally fetches the rendered HTML and unions its `<a href>` links with the JSON `references`-walker output. Catches URL patterns Apple's DocC JSON omits, operator overloads (`Int.&` slugified as `int_amp_<hash>`), legacy numeric-ID symbols (`1418511-iskindofclass`), `data.dictionary` REST sub-paths, and entire framework dirs Apple serves only as HTML (`apple_pay_on_the_web`, `applepencil`, `docc`, `samplecode`, `sign_in_with_apple`). ([#203](https://github.com/mihaelamj/cupertino/issues/203))
+In `auto` mode, after a successful JSON API fetch, the crawler additionally fetches the rendered HTML and unions its `<a href>` links with the JSON `references`-walker output. Catches URL patterns Apple's DocC JSON omits, operator overloads (`Int.&` slugified as `int_amp_<hash>`), legacy numeric-ID symbols (`1418511-iskindofclass`), `data.dictionary` REST sub-paths, and entire framework dirs Apple serves only as HTML (`apple_pay_on_the_web`, `applepencil`, `docc`, `samplecode`, `sign_in_with_apple`). (#203)
 
 A sparse-references skip heuristic keeps the per-page cost bounded: augmentation only runs when the JSON-extracted link count is below `htmlLinkAugmentationMaxRefs`. Pages with rich JSON references already cover the URL graph; HTML adds nothing for them. Roughly the sparse third of Apple's corpus runs through augmentation in practice, matching the issue's stated performance budget.
 
@@ -82,9 +82,9 @@ Use a self-hosted Sosumi instance for large corpus crawls. The public `https://s
 
 - [--output-dir](output-dir.md) - Output directory for downloaded resources
 - [--limit](limit.md) - Maximum number of items to fetch (packages / apple-sample-code sources only)
-- [--refresh-metadata](option%20%28--%29/refresh-metadata.md) - Opt into the SPI metadata + star-count refresh stage of `--source packages` (off by default post-[#1108](https://github.com/mihaelamj/cupertino/issues/1108))
-- [--skip-archives](option%20%28--%29/skip-archives.md) - Skip the archive-download stage of `--source packages` ([#217](https://github.com/mihaelamj/cupertino/issues/217))
-- `--annotate-availability` - Opt-in stage 3: walk the on-disk packages corpus and write per-package `availability.json` (deployment targets + `@available` attrs) ([#219](https://github.com/mihaelamj/cupertino/issues/219))
+- [--refresh-metadata](option%20%28--%29/refresh-metadata.md) - Opt into the SPI metadata + star-count refresh stage of `--source packages` (off by default post-#1108)
+- [--skip-archives](option%20%28--%29/skip-archives.md) - Skip the archive-download stage of `--source packages` (#217)
+- `--annotate-availability` - Opt-in stage 3: walk the on-disk packages corpus and write per-package `availability.json` (deployment targets + `@available` attrs) (#219)
 - `--fast` - Use higher concurrency and shorter timeouts for `--source availability` (faster but more aggressive)
 
 ## Examples
@@ -114,7 +114,7 @@ cupertino fetch --source packages --limit 100
 ### Fetch Apple Sample Code from GitHub (Recommended)
 ```bash
 cupertino fetch --source samples
-# Clones https://github.com/mihaelamj/cupertino-sample-code
+# Clones `cupertino-sample-code` (no longer hosted; data ships via `cupertino setup`)
 # 619 projects, ~10GB with Git LFS, ~4 minutes
 ```
 

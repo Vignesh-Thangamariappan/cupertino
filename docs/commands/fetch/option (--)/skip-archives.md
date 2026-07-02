@@ -10,9 +10,9 @@ cupertino fetch --source packages --skip-archives
 
 ## Description
 
-Bypasses stage 2 of `--source packages` (the GitHub source-archive download for each priority package). Use with `--annotate-availability` to re-annotate the existing on-disk corpus without re-downloading. ([#217](https://github.com/mihaelamj/cupertino/issues/217))
+Bypasses stage 2 of `--source packages` (the GitHub source-archive download for each priority package). Use with `--annotate-availability` to re-annotate the existing on-disk corpus without re-downloading. (#217)
 
-Post-[#1108](https://github.com/mihaelamj/cupertino/issues/1108), stage 1 (Swift Package Index metadata + star-count refresh) is opt-in via `--refresh-metadata`. Combining `--skip-archives` with `--refresh-metadata` runs only stage 1.
+Post-#1108, stage 1 (Swift Package Index metadata + star-count refresh) is opt-in via `--refresh-metadata`. Combining `--skip-archives` with `--refresh-metadata` runs only stage 1.
 
 ## Default
 

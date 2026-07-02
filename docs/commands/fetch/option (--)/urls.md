@@ -10,7 +10,7 @@ cupertino fetch --source apple-docs --urls <path>
 
 ## Description
 
-Each URL in the file is enqueued at depth 0; the crawler then follows links from each up to `--max-depth`. Combine with `--max-depth 0` to fetch the listed URLs with no descent. Useful for fetching a fixed list (URLs another corpus has but this one is missing) without re-spidering everything. Lines starting with `#` and blank lines are ignored. ([#210](https://github.com/mihaelamj/cupertino/issues/210))
+Each URL in the file is enqueued at depth 0; the crawler then follows links from each up to `--max-depth`. Combine with `--max-depth 0` to fetch the listed URLs with no descent. Useful for fetching a fixed list (URLs another corpus has but this one is missing) without re-spidering everything. Lines starting with `#` and blank lines are ignored. (#210)
 
 ## Default
 

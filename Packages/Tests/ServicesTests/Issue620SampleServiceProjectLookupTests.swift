@@ -7,7 +7,7 @@ import SampleIndexSQLite
 import SharedConstants
 import Testing
 
-/// Regression suite for [#620](https://github.com/mihaelamj/cupertino/issues/620).
+/// Regression suite for #620.
 ///
 /// The CLI's `read-sample-file` command (`CLIImpl.Command.ReadSampleFile`)
 /// now probes `Sample.Search.Service.getProject(id:)` before the file

@@ -25,7 +25,7 @@ The binaries are located in `.build/release/`:
 - `.build/release/mock-ai-agent`
 - `.build/release/cupertino-rel`
 
-## Dev binary base directory ([#218](https://github.com/mihaelamj/cupertino/issues/218), [#675](https://github.com/mihaelamj/cupertino/issues/675))
+## Dev binary base directory (#218, #675)
 
 ### How it works (post-#675)
 
@@ -38,7 +38,7 @@ Every cupertino binary classifies itself at startup based on its install locatio
 | `/home/linuxbrew/.linuxbrew/...` | `~/.cupertino/` (Linux brew production) |
 | Anywhere else — `.build/`-relative dev build, CI workspace, manually copied binary, `/tmp/`, etc. | **`~/.cupertino-dev/`** (isolated) |
 
-The dev-isolated default is the safety property: a binary you built locally cannot silently corrupt your brew install just by running a `save` / `setup` / `fetch` command. This is enforced by the binary itself at startup, not by any external build-step or Makefile drop, so it cannot be bypassed by skipping `make build-release` and using raw `swift build -c release` directly. ([#675](https://github.com/mihaelamj/cupertino/issues/675))
+The dev-isolated default is the safety property: a binary you built locally cannot silently corrupt your brew install just by running a `save` / `setup` / `fetch` command. This is enforced by the binary itself at startup, not by any external build-step or Makefile drop, so it cannot be bypassed by skipping `make build-release` and using raw `swift build -c release` directly. (#675)
 
 ### Optional explicit override
 

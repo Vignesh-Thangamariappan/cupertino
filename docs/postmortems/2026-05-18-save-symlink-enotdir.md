@@ -6,7 +6,7 @@
 | **Incident date** | 2026-05-18 |
 | **Document created** | 2026-05-19 |
 | **Last revised** | 2026-05-19 (settled after PR #788 fix + Issue779OptionalDirSymlinkTests landed) |
-| **Tracking issue** | [#779](https://github.com/mihaelamj/cupertino/issues/779) |
+| **Tracking issue** | #779 |
 | **Severity** | release-blocker (v1.2.0 ceremony was blocked) |
 | **Companion docs** | [docs/audits/issue-779-reindex-crash-20260518.log](../audits/issue-779-reindex-crash-20260518.log); [docs/handoff/2026-05-18.md](../handoff/2026-05-18.md) |
 
@@ -67,7 +67,7 @@ Process exit-non-zero, surfaced by `tail`ing the log file the next morning. No C
 
 Detection lagged the failure by hours (overnight: crash at 17:35, surfaced when the user checked the log the next day) because no exit-status notification was wired up. The `~/bin/reindex-cupertino-dev.sh` launcher gives a "Done when log contains '✅ Search index built successfully'" hint but does not actively notify on failure. That gap is its own follow-up.
 
-The save-log diagnostic work landed in PRs [#780](https://github.com/mihaelamj/cupertino/pull/780), [#781](https://github.com/mihaelamj/cupertino/pull/781), [#782](https://github.com/mihaelamj/cupertino/pull/782) on 2026-05-19 (per-line ISO 8601 timestamps + startup invocation banner) and reduces the lag for the next incident of this class by making the failure context self-contained in the log.
+The save-log diagnostic work landed in PRs #780, #781, #782 on 2026-05-19 (per-line ISO 8601 timestamps + startup invocation banner) and reduces the lag for the next incident of this class by making the failure context self-contained in the log.
 
 ---
 
@@ -126,20 +126,20 @@ Two changes, neither merged at the time this postmortem was drafted:
 
 ### 7.1 Fixed by this postmortem
 
-- **PR [#788](https://github.com/mihaelamj/cupertino/pull/788)** (commit `face50f`, merged 2026-05-19): `Indexer.DocsService.optionalDir` returns `url.resolvingSymlinksInPath()` instead of `url`; `Search.IndexBuilder.buildIndex` wraps each strategy call in `do/catch` so a single strategy failure cannot strand the post-loop enrichment passes. End-to-end validation: ran `cupertino save --docs` against the 10% mini-corpus (41,569 doc symlinks + leaf symlinks for the four optional sources) on the fix-bearing binary; all four optional sources indexed (swift-evolution 483, swift-org 115, archive 368, hig 173), all three enrichment passes ran (`framework_aliases` has 22 synonym rows, `applyAppleStaticConstraints` logged, `propagateConstraintsFromParents` logged), `✅ Search index built successfully` in 11m 18s with zero errors.
+- **PR #788** (commit `face50f`, merged 2026-05-19): `Indexer.DocsService.optionalDir` returns `url.resolvingSymlinksInPath()` instead of `url`; `Search.IndexBuilder.buildIndex` wraps each strategy call in `do/catch` so a single strategy failure cannot strand the post-loop enrichment passes. End-to-end validation: ran `cupertino save --docs` against the 10% mini-corpus (41,569 doc symlinks + leaf symlinks for the four optional sources) on the fix-bearing binary; all four optional sources indexed (swift-evolution 483, swift-org 115, archive 368, hig 173), all three enrichment passes ran (`framework_aliases` has 22 synonym rows, `applyAppleStaticConstraints` logged, `propagateConstraintsFromParents` logged), `✅ Search index built successfully` in 11m 18s with zero errors.
 - **PR (this commit)**: `Issue779OptionalDirSymlinkTests` integration test under `Packages/Tests/SearchTests/` covers both the positive case (post-fix path: `SwiftEvolutionStrategy` with a URL through `resolvingSymlinksInPath()` indexes content cleanly from a leaf directory-symlink fixture) and the negative ENOTDIR sentinel (pre-fix shape: same strategy with the raw symlink URL throws NSCocoa 256 with `NSPOSIXErrorDomain` code 20 underlying). Pins the bug as a regression sentinel: any future change that breaks `resolvingSymlinksInPath()` at the composition root surfaces in the negative test.
 
 ### 7.2 Filed for later
 
 | Item | Issue | Reason |
 |---|---|---|
-| Save-log diagnostics (per-line ISO 8601, startup invocation banner) | [#780](https://github.com/mihaelamj/cupertino/issues/780), [#781](https://github.com/mihaelamj/cupertino/issues/781) | Already merged via [#782](https://github.com/mihaelamj/cupertino/pull/782) on 2026-05-19; next incident's log will be self-describing |
-| Audit other URL-variant FileManager call sites in the codebase | Filed as [#786](https://github.com/mihaelamj/cupertino/issues/786); shipped via PR [#787](https://github.com/mihaelamj/cupertino/pull/787) + a follow-up commit catching a third call site (`PackageIndexer.walkDirectoryForFiles` enumerator) that c1 spotted during PR critic. Total: 7 sites migrated to `Shared.Utils.FileSystem.contentsOfDirectory` / `.enumerator` wrappers (Option C centralised approach). |
+| Save-log diagnostics (per-line ISO 8601, startup invocation banner) | #780, #781 | Already merged via #782 on 2026-05-19; next incident's log will be self-describing |
+| Audit other URL-variant FileManager call sites in the codebase | Filed as #786; shipped via PR #787 + a follow-up commit catching a third call site (`PackageIndexer.walkDirectoryForFiles` enumerator) that c1 spotted during PR critic. Total: 7 sites migrated to `Shared.Utils.FileSystem.contentsOfDirectory` / `.enumerator` wrappers (Option C centralised approach). |
 | Active failure notification from the launcher (`say` / desktop notification on exit-non-zero, not just on success) | Still open; not filed as an issue yet. Detection lagged the 17:35 failure by ~12h because the launcher only documents the success signal. |
 | Integration test: symlinked optional source dir | Shipped: `Issue779OptionalDirSymlinkTests` (this commit). Positive + negative sentinel as described in §7.1. |
-| Drop redundant `packages` + `package_dependencies` tables from `search.db` | Filed as [#789](https://github.com/mihaelamj/cupertino/issues/789); shipped via PR [#790](https://github.com/mihaelamj/cupertino/pull/790). Schema 17 → 18 with `DROP TABLE` migration. Surfaced during the #779 mini-corpus validation when the post-crash DB showed `packages` row count of 0 despite a successful strategy run. |
-| `CREATE TABLE`-without-writer lint rule | Filed as [#791](https://github.com/mihaelamj/cupertino/issues/791); mechanical floor for the class-of-bug that #789 surfaced. Not yet routed. |
-| Post-index search-results comparator (candidate `search.db` vs brew reference) | Filed as [#792](https://github.com/mihaelamj/cupertino/issues/792); broader regression catcher (the "would have caught #779, #786, #789 earlier" tool). Not yet routed. |
+| Drop redundant `packages` + `package_dependencies` tables from `search.db` | Filed as #789; shipped via PR #790. Schema 17 → 18 with `DROP TABLE` migration. Surfaced during the #779 mini-corpus validation when the post-crash DB showed `packages` row count of 0 despite a successful strategy run. |
+| `CREATE TABLE`-without-writer lint rule | Filed as #791; mechanical floor for the class-of-bug that #789 surfaced. Not yet routed. |
+| Post-index search-results comparator (candidate `search.db` vs brew reference) | Filed as #792; broader regression catcher (the "would have caught #779, #786, #789 earlier" tool). Not yet routed. |
 
 ### 7.3 Where we got lucky
 
@@ -204,7 +204,7 @@ This layout exists so dev work shares the 2.5 GB+ brew corpus without duplicatin
 
 ### External
 
-- GitHub issue [#779](https://github.com/mihaelamj/cupertino/issues/779): tracking issue, full investigation thread
-- GitHub PRs [#780](https://github.com/mihaelamj/cupertino/pull/780), [#781](https://github.com/mihaelamj/cupertino/pull/781), [#782](https://github.com/mihaelamj/cupertino/pull/782): save-log diagnostics that reduce detection lag for the next incident of this class
+- GitHub issue #779: tracking issue, full investigation thread
+- GitHub PRs #780, #781, #782: save-log diagnostics that reduce detection lag for the next incident of this class
 - Apple Foundation: `FileManager.contentsOfDirectory(at:includingPropertiesForKeys:options:)` and `FileManager.contentsOfDirectory(atPath:)` have differing symlink-handling semantics. No canonical Apple documentation flags this; behavior empirically verified by reproduction.
 - Postmortem template adapted from the consensus across Google SRE, Amazon COE, Meta SEV, Microsoft Azure PIR, GitLab handbook RCA, Stripe, and Cloudflare published postmortems. Template at [`docs/postmortems/_TEMPLATE.md`](_TEMPLATE.md), canonical source at `mihaela-agents/Rules/universal/templates/postmortem.md`.

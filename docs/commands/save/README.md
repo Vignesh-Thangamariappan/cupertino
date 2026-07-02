@@ -2,7 +2,7 @@
 
 Rebuild the per-source databases (`apple-documentation.db`, `packages.db`, `apple-sample-code.db`, and the smaller per-source files) from on-disk sources.
 
-> **Most users do not need this command.** `cupertino setup` downloads the pre-built bundle and is the supported end-user workflow. `save` is for maintainers rebuilding the bundle, or advanced users rebuilding from a local crawl produced by `cupertino fetch`. ([#671](https://github.com/mihaelamj/cupertino/issues/671))
+> **Most users do not need this command.** `cupertino setup` downloads the pre-built bundle and is the supported end-user workflow. `save` is for maintainers rebuilding the bundle, or advanced users rebuilding from a local crawl produced by `cupertino fetch`. (#671)
 
 ## Synopsis
 
@@ -27,7 +27,7 @@ The `save` command builds the local SQLite databases that back `cupertino search
 
 `apple-sample-code` is accepted as an alias for `samples` (cross-command consistency with `cupertino fetch --source apple-sample-code`).
 
-Bare `cupertino save` (no `--source` and no `--all`) is a usage error post-#1037. Sources whose input directory is absent or whose catalog is empty are skipped cleanly; the per-source summary shows `[source] skipped (no local corpus)` and the run does not count as a failure ([#671](https://github.com/mihaelamj/cupertino/issues/671)).
+Bare `cupertino save` (no `--source` and no `--all`) is a usage error post-#1037. Sources whose input directory is absent or whose catalog is empty are skipped cleanly; the per-source summary shows `[source] skipped (no local corpus)` and the run does not count as a failure (#671).
 
 **Dispatch granularity**: `--source <id>` narrows the docs runner to ONLY the destination DB whose providers include that id. `--source apple-docs` builds `apple-documentation.db` alone; post-#1038 `swift-org` builds `swift-org.db` and `swift-book` builds `swift-book.db` (separate files); `--source samples` writes to `apple-sample-code.db` via BOTH the Sample.Index rich-data pipeline AND the docs runner's SampleCodeSource group; `--source packages` runs the standalone PackagesService outside the docs runner. See [source.md](option%20%28--%29/source.md) Dispatch section.
 
@@ -58,7 +58,7 @@ Bare `cupertino save` (no `--source` and no `--all`) is a usage error post-#1037
 
 ### Common options
 
-- [--yes](option%20%28--%29/yes.md), skip the preflight summary + confirmation prompt ([#232](https://github.com/mihaelamj/cupertino/issues/232)). Auto-skipped when stdin isn't a TTY (so cron jobs, CI runs, and pipelines don't hang waiting for input).
+- [--yes](option%20%28--%29/yes.md), skip the preflight summary + confirmation prompt (#232). Auto-skipped when stdin isn't a TTY (so cron jobs, CI runs, and pipelines don't hang waiting for input).
 
 ## Examples
 

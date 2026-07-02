@@ -10,7 +10,7 @@ cupertino save --source swift-book --swift-book-dir <path>
 
 ## Description
 
-Overrides the default Swift Book corpus location for `cupertino save --source swift-book`. Added in [#1063](https://github.com/mihaelamj/cupertino/issues/1063) alongside `--hig-dir` to complete the per-source `--<source>-dir` override surface. Most users never use this: they download the pre-built bundle via `cupertino setup`.
+Overrides the default Swift Book corpus location for `cupertino save --source swift-book`. Added in #1063 alongside `--hig-dir` to complete the per-source `--<source>-dir` override surface. Most users never use this: they download the pre-built bundle via `cupertino setup`.
 
 ## Default
 

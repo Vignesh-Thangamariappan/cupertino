@@ -6,7 +6,7 @@ SQLite database with Full-Text Search (FTS5) index for fast sample code searches
 
 **Default**: `~/.cupertino/apple-sample-code.db`
 
-As of v1.3.0 the shipped database is in rollback (`journal=delete`) mode ([#1192](https://github.com/mihaelamj/cupertino/issues/1192)): it opens read-only with no `-wal` / `-shm` sidecar, so the single file is self-contained for copy and distribution. Every read / serve connection opens it read-only ([#1194](https://github.com/mihaelamj/cupertino/issues/1194)).
+As of v1.3.0 the shipped database is in rollback (`journal=delete`) mode (#1192): it opens read-only with no `-wal` / `-shm` sidecar, so the single file is self-contained for copy and distribution. Every read / serve connection opens it read-only (#1194).
 
 ## Created By
 

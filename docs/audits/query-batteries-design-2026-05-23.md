@@ -1,6 +1,6 @@
 # Query batteries design (Phase 2-5)
 
-**Filed**: 2026-05-23. **Status**: design, queries-only. **Umbrella**: [#943](https://github.com/mihaelamj/cupertino/issues/943). **Phase issues**: [#944](https://github.com/mihaelamj/cupertino/issues/944), [#945](https://github.com/mihaelamj/cupertino/issues/945), [#946](https://github.com/mihaelamj/cupertino/issues/946), [#947](https://github.com/mihaelamj/cupertino/issues/947).
+**Filed**: 2026-05-23. **Status**: design, queries-only. **Umbrella**: #943. **Phase issues**: #944, #945, #946, #947.
 
 This document enumerates the query corpora for the four phases extending the Cranfield-paradigm evaluation framework beyond `search` (Phase 1, already shipped at v1.2.0 as `scripts/eval/search-quality-phase1.py`). Each corpus is a list of `(input → documented expected outcome)` fixtures that the future harness consumes. Mirrors the shape of Phase 1's `CANONICAL_QUERIES`.
 
@@ -8,7 +8,7 @@ This document enumerates the query corpora for the four phases extending the Cra
 
 ---
 
-## Phase 2 ([#944](https://github.com/mihaelamj/cupertino/issues/944)): AST tools
+## Phase 2 (#944): AST tools
 
 5 MCP tools × ~10 queries = 49 fixtures.
 
@@ -87,7 +87,7 @@ This document enumerates the query corpora for the four phases extending the Cra
 
 ---
 
-## Phase 3 ([#945](https://github.com/mihaelamj/cupertino/issues/945)): `get_inheritance`
+## Phase 3 (#945): `get_inheritance`
 
 20 walks + 10 negative-path probes = 30 fixtures.
 
@@ -148,7 +148,7 @@ This document enumerates the query corpora for the four phases extending the Cra
 
 ---
 
-## Phase 4 ([#946](https://github.com/mihaelamj/cupertino/issues/946)): read commands
+## Phase 4 (#946): read commands
 
 20 fixtures across 3 commands.
 
@@ -189,7 +189,7 @@ This document enumerates the query corpora for the four phases extending the Cra
 
 ---
 
-## Phase 5 ([#947](https://github.com/mihaelamj/cupertino/issues/947)): list / doctor / package-search
+## Phase 5 (#947): list / doctor / package-search
 
 15 fixtures.
 

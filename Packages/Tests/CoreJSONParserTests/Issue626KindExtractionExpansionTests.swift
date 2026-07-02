@@ -4,7 +4,7 @@ import Foundation
 import SharedConstants
 import Testing
 
-/// Regression suite for [#626](https://github.com/mihaelamj/cupertino/issues/626).
+/// Regression suite for #626.
 ///
 /// The v1.1.0 shipped bundle landed with `kind=unknown` for 162,821 of
 /// 284,518 apple-docs rows (57%). Audit on the live DB found two causes:

@@ -19,7 +19,7 @@ Verifies that the MCP server can start and all required components are available
 - **Sample code index (`apple-sample-code.db`)** - Presence, size, row counts (projects + indexed files + symbols).
 - **Per-source documentation indexes** - One health block per source database (`apple-documentation.db`, `hig.db`, `apple-archive.db`, `swift-evolution.db`, `swift-org.db`, `swift-book.db`): presence, size, **schema version** vs binary, framework + entry counts. Schema mismatch (older or newer than the binary) is a hard fail with a precise rebuild hint. A legacy `search.db` check remains for installs still carrying the pre-v1.3.0 unified file (normally absent post-split).
 - **Resource providers** - DocsResourceProvider and SearchToolProvider are available
-- **Schema versions per DB** ([#234](https://github.com/mihaelamj/cupertino/issues/234)) - sequential schema number + journal mode for every local database. WAL sidecar size + non-local-volume warnings ([#236](https://github.com/mihaelamj/cupertino/issues/236)). The v1.3.0 bundle ships `packages.db` + `apple-sample-code.db` in rollback (`journal=delete`) mode; doctor labels that `read-only distribution mode` and does not flag it.
+- **Schema versions per DB** (#234) - sequential schema number + journal mode for every local database. WAL sidecar size + non-local-volume warnings (#236). The v1.3.0 bundle ships `packages.db` + `apple-sample-code.db` in rollback (`journal=delete`) mode; doctor labels that `read-only distribution mode` and does not flag it.
 
 **[`--save`](option%20%28--%29/save.md) adds the maintenance sections** for users about to crawl or re-index:
 
@@ -27,7 +27,7 @@ Verifies that the MCP server can start and all required components are available
 - **Swift Packages (filesystem)** - User selections file, downloaded READMEs, orphan / missing tallies, priority-package counts (Apple + Ecosystem)
 - **`cupertino save` preflight summary** - per-source presence and availability-annotation coverage (backed by `Indexer.Preflight.preflightLines(...)`)
 
-Use this command to troubleshoot setup issues before starting the server. Pre-[#68](https://github.com/mihaelamj/cupertino/issues/68) the corpus + packages-filesystem sections ran on every invocation; they made a `cupertino setup`-only install look broken (a `0 files` line under "Apple docs" is normal in that flow, not a failure).
+Use this command to troubleshoot setup issues before starting the server. Pre-#68 the corpus + packages-filesystem sections ran on every invocation; they made a `cupertino setup`-only install look broken (a `0 files` line under "Apple docs" is normal in that flow, not a failure).
 
 ## Options
 
@@ -63,9 +63,9 @@ Adds these to the default output:
 
 - 📂 Raw corpus directories (the inputs `cupertino save` would consume)
 - 📦 Swift Packages: user selection state + downloaded README counts + orphan / missing tallies
-- 🔍 `cupertino save` per-source preflight summary (backed by `Indexer.Preflight.preflightLines(...)`, lifted in [#244](https://github.com/mihaelamj/cupertino/issues/244))
+- 🔍 `cupertino save` per-source preflight summary (backed by `Indexer.Preflight.preflightLines(...)`, lifted in #244)
 
-Pre-[#68](https://github.com/mihaelamj/cupertino/issues/68) this flag short-circuited to only the preflight summary; it is now additive so a maintainer gets one combined report instead of running doctor twice.
+Pre-#68 this flag short-circuited to only the preflight summary; it is now additive so a maintainer gets one combined report instead of running doctor twice.
 
 **Type:** Flag
 **Default:** false
@@ -290,7 +290,7 @@ Default `cupertino doctor` output before `cupertino setup` has been run:
 ⚠️  Some checks failed - see above for details
 ```
 
-Note the absence of the `📚 Documentation Directories` and filesystem `📦 Swift Packages` sections that appeared here pre-[#68](https://github.com/mihaelamj/cupertino/issues/68). A `cupertino setup`-only user never populates the raw corpus dirs and the missing-corpus warnings were false alarms. To see those sections, run `cupertino doctor --save`.
+Note the absence of the `📚 Documentation Directories` and filesystem `📦 Swift Packages` sections that appeared here pre-#68. A `cupertino setup`-only user never populates the raw corpus dirs and the missing-corpus warnings were false alarms. To see those sections, run `cupertino doctor --save`.
 
 ## Health Checks
 
@@ -337,7 +337,7 @@ Shows:
 - Schema version (with `matches` / older / newer status)
 - Framework count
 
-**Critical** - schema mismatch is a hard fail. Older schema suggests `rm <db> && cupertino save --source apple-docs`. Newer schema suggests `brew upgrade cupertino`. Doctor exits non-zero so CI / smoke tests fail loudly. ([#192 F2](https://github.com/mihaelamj/cupertino/issues/192))
+**Critical** - schema mismatch is a hard fail. Older schema suggests `rm <db> && cupertino save --source apple-docs`. Newer schema suggests `brew upgrade cupertino`. Doctor exits non-zero so CI / smoke tests fail loudly. (#192 F2 (#192))
 
 #### 5. Providers
 
@@ -347,9 +347,9 @@ Confirms that:
 
 **Always passes** - providers are built into the binary.
 
-#### 6. Schema versions per DB ([#234](https://github.com/mihaelamj/cupertino/issues/234))
+#### 6. Schema versions per DB (#234)
 
-Reads `PRAGMA user_version` for every local database (the 8 per-source DBs plus any legacy `search.db`) and reports the sequential schema number plus journal mode. The v1.3.0 bundle ships `packages.db` + `apple-sample-code.db` in rollback (`journal=delete`) mode, labelled `read-only distribution mode` and not flagged; other DBs on `journal=wal` get a non-local-volume warning for NFS / SMB / AFP, since SQLite WAL doesn't work over network filesystems ([#236](https://github.com/mihaelamj/cupertino/issues/236)). The WAL sidecar size is included; runaway sidecars (`> 16 MB`) hint at checkpoint starvation from a long-lived reader.
+Reads `PRAGMA user_version` for every local database (the 8 per-source DBs plus any legacy `search.db`) and reports the sequential schema number plus journal mode. The v1.3.0 bundle ships `packages.db` + `apple-sample-code.db` in rollback (`journal=delete`) mode, labelled `read-only distribution mode` and not flagged; other DBs on `journal=wal` get a non-local-volume warning for NFS / SMB / AFP, since SQLite WAL doesn't work over network filesystems (#236). The WAL sidecar size is included; runaway sidecars (`> 16 MB`) hint at checkpoint starvation from a long-lived reader.
 
 ### `--save` only (maintainer-facing, added by [`--save`](option%20%28--%29/save.md))
 
@@ -370,7 +370,7 @@ Shows:
 #### B. Swift Packages (filesystem)
 
 Checks:
-- **User selections file** (`~/.cupertino/selected-packages.json`), additively merged with the embedded priority list on every load ([#218](https://github.com/mihaelamj/cupertino/issues/218)). New seeds shipped in `PriorityPackagesEmbedded.swift` propagate into existing installs the next time any subcommand touches the catalog. User deletions don't stick: the merge is set-diff.
+- **User selections file** (`~/.cupertino/selected-packages.json`), additively merged with the embedded priority list on every load (#218). New seeds shipped in `PriorityPackagesEmbedded.swift` propagate into existing installs the next time any subcommand touches the catalog. User deletions don't stick: the merge is set-diff.
 - **Downloaded packages** under `~/.cupertino/packages/<owner>/<repo>/` (whole archives, not just READMEs, see `fetch --source packages` stage 2)
 - Reports orphaned READMEs (packages no longer selected)
 - Counts priority packages bundled with the binary (Apple + Ecosystem)
@@ -379,7 +379,7 @@ Checks:
 
 #### C. `cupertino save` preflight summary
 
-Same output `cupertino save` prints before its confirmation prompt: per-source presence, availability-annotation coverage, sidecar counts. Backed by `Indexer.Preflight.preflightLines(...)` ([#244](https://github.com/mihaelamj/cupertino/issues/244)). Read-only.
+Same output `cupertino save` prints before its confirmation prompt: per-source presence, availability-annotation coverage, sidecar counts. Backed by `Indexer.Preflight.preflightLines(...)` (#244). Read-only.
 
 ## Exit Codes
 

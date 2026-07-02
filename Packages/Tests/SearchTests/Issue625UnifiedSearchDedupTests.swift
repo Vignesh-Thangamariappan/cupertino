@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#625](https://github.com/mihaelamj/cupertino/issues/625).
+/// Regression suite for #625.
 ///
 /// `cupertino search <type>` **without** `--source` runs the
 /// cross-source aggregator (`Search.SmartQuery.answer`) which fuses

@@ -81,5 +81,5 @@ The default 30-second SIGTERM→SIGKILL window is a practical floor for a modera
 ## See Also
 
 - [`--yes`](yes.md), bypass preflight prompts (the same flag bypasses `--force-replace`'s typed-confirmation gate)
-- Issue [#722](https://github.com/mihaelamj/cupertino/issues/722), the `--force-replace` design rationale
-- Issue [#253](https://github.com/mihaelamj/cupertino/issues/253), the base concurrent-save gate
+- Issue #722, the `--force-replace` design rationale
+- Issue #253, the base concurrent-save gate

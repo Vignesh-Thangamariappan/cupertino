@@ -1,6 +1,6 @@
 # Search arc lift-out trace, 2026-05-24
 
-Mechanical trace evidence for [#901](https://github.com/mihaelamj/cupertino/issues/901) (verification PR for the Search arc standalone-portability claim under epic [#893](https://github.com/mihaelamj/cupertino/issues/893)). Per `mihaela-agents/Rules/swift/gof-di-rules.md` rule 5 (standalone-portable packages) and `mihaela-agents/Rules/swift/per-package-import-contract.md` (the import-contract this trace verifies, sequencing the cupertino strict-DI epic). #901's "See also" referenced an external `protocol-seam-audit.md` template; that file does not exist on this checkout, so the trace inlines the lift-out check methodology directly: per-target portability harness (`scripts/check-target-portability.sh`) running `swift build --target <T>` against a generated minimal `Package.swift` containing only the target and its transitive closure.
+Mechanical trace evidence for #901 (verification PR for the Search arc standalone-portability claim under epic #893). Per `mihaela-agents/Rules/swift/gof-di-rules.md` rule 5 (standalone-portable packages) and `mihaela-agents/Rules/swift/per-package-import-contract.md` (the import-contract this trace verifies, sequencing the cupertino strict-DI epic). #901's "See also" referenced an external `protocol-seam-audit.md` template; that file does not exist on this checkout, so the trace inlines the lift-out check methodology directly: per-target portability harness (`scripts/check-target-portability.sh`) running `swift build --target <T>` against a generated minimal `Package.swift` containing only the target and its transitive closure.
 
 Recorded against develop @ commit 835b621 (PR #997 squash-merge of #900 sub-PR B: Search to SearchAPI rename).
 
@@ -101,8 +101,8 @@ All 6 strategy builds green via `bash scripts/check-target-portability.sh <X>Str
 
 ## Cross-refs
 
-- Epic [#893](https://github.com/mihaelamj/cupertino/issues/893): producer-backend split.
-- Sibling close ceremony: [#907](https://github.com/mihaelamj/cupertino/issues/907) (full epic audit + plan-doc finalisation).
-- Pluggability epic [#919](https://github.com/mihaelamj/cupertino/issues/919) (closed by #935 end-to-end TDD proof in PR #941).
+- Epic #893: producer-backend split.
+- Sibling close ceremony: #907 (full epic audit + plan-doc finalisation).
+- Pluggability epic #919 (closed by #935 end-to-end TDD proof in PR #941).
 - `mihaela-agents/Rules/swift/gof-di-rules.md` rule 5 (standalone-portable packages).
 - `mihaela-agents/Rules/swift/per-package-import-contract.md` (the import-contract this trace verifies).

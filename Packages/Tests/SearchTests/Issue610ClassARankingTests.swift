@@ -5,7 +5,7 @@ import SearchModels
 @testable import SearchSQLite
 import Testing
 
-/// Regression suite for [#610](https://github.com/mihaelamj/cupertino/issues/610)
+/// Regression suite for #610
 /// Class A — the 9 of 14 wrong-winner cases where the canonical Apple type
 /// page exists in the corpus but BM25 buries it under a property/method
 /// page with the same bare title and stronger term density.

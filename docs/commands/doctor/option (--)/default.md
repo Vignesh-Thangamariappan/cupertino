@@ -18,7 +18,7 @@ cupertino doctor \
   --evolution-dir ~/.cupertino/swift-evolution
 ```
 
-Default output focuses on **database + MCP health**. Raw corpus directories and Swift-package selection state moved behind [`--save`](save.md) in [#68](https://github.com/mihaelamj/cupertino/issues/68) because a `cupertino setup` user has no raw corpus on disk (the bundle ships pre-built DBs); the previous `0 files` line under "Apple docs" looked like a failure and isn't.
+Default output focuses on **database + MCP health**. Raw corpus directories and Swift-package selection state moved behind [`--save`](save.md) in #68 because a `cupertino setup` user has no raw corpus on disk (the bundle ships pre-built DBs); the previous `0 files` line under "Apple docs" looked like a failure and isn't.
 
 ## Default Option Values
 
@@ -114,7 +114,7 @@ or
    ✓ apple-sample-code.db: 4 (sequential), journal=delete (read-only distribution mode)
 ```
 
-Anything other than `journal=wal` is flagged (the schema-version probe doubles as a WAL sanity check per [#236](https://github.com/mihaelamj/cupertino/issues/236)).
+Anything other than `journal=wal` is flagged (the schema-version probe doubles as a WAL sanity check per #236).
 
 ## Exit Codes
 

@@ -53,7 +53,7 @@ Copy the skill definition to your project or global skills directory:
 
 ```bash
 # Clone this repo
-git clone https://github.com/mihaelamj/cupertino.git
+git clone https://codeberg.org/CupertinoHQ/cupertino.git
 
 # For a single project
 mkdir -p .claude/skills/cupertino

@@ -8,7 +8,7 @@ import SharedConstants
 extension Crawler {
     /// Fetches all framework URLs from Apple's technology index (technologies.json)
     /// Used to seed the crawler queue for complete framework coverage.
-    /// See: https://github.com/mihaelamj/cupertino/issues/160
+    /// See: #160
     public enum TechnologiesIndex {
         // swiftlint:disable:next force_try
         private static let indexURL = try! URL(knownGood: "\(Shared.Constants.BaseURL.appleTutorialsDocs)/technologies.json")

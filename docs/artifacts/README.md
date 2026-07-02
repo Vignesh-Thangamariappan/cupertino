@@ -34,7 +34,7 @@ All Cupertino artifacts are stored under:
 | [packages.db](folders/packages.db.md) | FTS5 search index for Swift packages | File documentation |
 | [config.json](folders/config.json.md) | Application configuration | File documentation |
 
-The eight databases above are the v1.3.0 per-source split of the former unified `search.db` ([#1036](https://github.com/mihaelamj/cupertino/issues/1036)); all ship in rollback (read-only) mode.
+The eight databases above are the v1.3.0 per-source split of the former unified `search.db` (#1036); all ship in rollback (read-only) mode.
 
 ## Quick Reference
 

@@ -36,7 +36,7 @@ cupertino fetch --source apple-sample-code
 
 ### GitHub Clone (`samples` source)
 - **619 sample code projects** as extracted folders
-- Cloned from https://github.com/mihaelamj/cupertino-sample-code
+- Cloned from `cupertino-sample-code` (no longer hosted; data ships via `cupertino setup`)
 - Uses Git LFS for large binary files (~10GB total)
 - Ready to open in Xcode immediately
 - Pull to update: `cd cupertino-sample-code && git pull`

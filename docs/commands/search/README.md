@@ -16,7 +16,7 @@ This command provides the same search functionality as the MCP `search` tool, al
 
 `search` operates in two modes:
 
-- **Default (no `--source`)**: fans the question out across every available DB in parallel: Apple docs, samples, HIG, Apple Archive, Swift Evolution, swift.org, the Swift Book, and packages. It ranks the merged candidates via reciprocal-rank fusion (k=60). Output is chunked excerpts ready for LLM context. This used to be a separate `cupertino ask` command; it was absorbed into `search` in [#239](https://github.com/mihaelamj/cupertino/issues/239).
+- **Default (no `--source`)**: fans the question out across every available DB in parallel: Apple docs, samples, HIG, Apple Archive, Swift Evolution, swift.org, the Swift Book, and packages. It ranks the merged candidates via reciprocal-rank fusion (k=60). Output is chunked excerpts ready for LLM context. This used to be a separate `cupertino ask` command; it was absorbed into `search` in #239.
 - **`--source <name>`**: queries one source and returns the source-specific list view (URI + summary). Use this when you know exactly which corpus you want.
 
 A failing fetcher (e.g. missing DB) collapses to empty rather than failing the whole query, so partial coverage still returns useful results.
@@ -228,7 +228,7 @@ cupertino search "@Observable" --source samples --sample-db ~/custom/apple-sampl
 
 ### --per-source
 
-Per-source candidate cap before reciprocal-rank fusion. Fan-out mode only. ([#239](https://github.com/mihaelamj/cupertino/issues/239))
+Per-source candidate cap before reciprocal-rank fusion. Fan-out mode only. (#239)
 
 **Type:** Integer
 **Default:** 10
@@ -266,7 +266,7 @@ Skip the samples source. Fan-out mode only.
 
 ### --brief
 
-Trim each result's excerpt to its first ~12 non-blank lines for triage. The `Read full:` hint, `See also` footer, and tips still print. Fan-out mode + text/markdown only, JSON keeps full chunks for programmatic consumers. ([#239](https://github.com/mihaelamj/cupertino/issues/239) follow-up)
+Trim each result's excerpt to its first ~12 non-blank lines for triage. The `Read full:` hint, `See also` footer, and tips still print. Fan-out mode + text/markdown only, JSON keeps full chunks for programmatic consumers. (#239 follow-up)
 
 **Type:** Flag
 **Default:** false (full chunks)
@@ -280,7 +280,7 @@ cupertino search "swiftui list animation" --brief --limit 5
 
 ### --platform
 
-Restrict packages, samples, and apple-docs results to the named platform's deployment target. Fan-out mode only. Requires `--min-version`. ([#220](https://github.com/mihaelamj/cupertino/issues/220), [#233](https://github.com/mihaelamj/cupertino/issues/233))
+Restrict packages, samples, and apple-docs results to the named platform's deployment target. Fan-out mode only. Requires `--min-version`. (#220, #233)
 
 **Type:** String
 **Values:** `iOS`, `macOS`, `tvOS`, `watchOS`, `visionOS` (case-insensitive)
@@ -523,4 +523,4 @@ No results found for 'nonexistent query'
 
 ## History
 
-- [#239](https://github.com/mihaelamj/cupertino/issues/239): default fan-out path absorbed from the removed `cupertino ask` subcommand. Pre-1.0 clean break, no alias.
+- #239: default fan-out path absorbed from the removed `cupertino ask` subcommand. Pre-1.0 clean break, no alias.

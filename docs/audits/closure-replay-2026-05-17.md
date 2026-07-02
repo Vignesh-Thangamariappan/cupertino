@@ -84,7 +84,7 @@ That's a **2-in-16 false-closure rate (12.5%)**. Matches the #101 miss pattern (
 - Query: `cupertino search 'MKMapView MKAnnotation MapKit' --source apple-docs`
 - Result: **Found 6 result(s)**. Top hits: `MKOverlay` (mapkit, score 216.91), `mapView(_:selectionAccessoryFor:)` (mapkit, score 72.36), `mapView(_:viewFor:)` (mapkit, score 72.24). All three tokens co-occur on canonical mapkit pages.
 
-**Verdict:** ✅ Confirmed closed. Evidence: https://github.com/mihaelamj/cupertino/issues/708 closing comment.
+**Verdict:** ✅ Confirmed closed. Evidence: #708 closing comment.
 
 #### #709 — ranking: direct class-reference pages miss while sample-project listings dominate
 
@@ -171,7 +171,7 @@ All four scores in the closing comment match my replay exactly.
 
 Substantive half (`--force-replace`) fully shipped: typed-confirmation gate, --yes bypass, SIGTERM→30s-grace→SIGKILL termination ladder, post-kill verification, `Action.forceReplaceSiblings` + `TerminationOutcome` enums, 24 tests across 6 suites in `Issue722ForceReplaceTests.swift`, per-flag docs at `docs/commands/save/option (--)/force-replace.md` + `force-replace-grace.md`.
 
-`--from-setup` half was formally scoped-out via [scope-finding comment](https://github.com/mihaelamj/cupertino/issues/722#issuecomment-4468563722): no setup→save subprocess invocation exists in the codebase. Legitimate scope reduction with re-file hook.
+`--from-setup` half was formally scoped-out via scope-finding comment (#722): no setup→save subprocess invocation exists in the codebase. Legitimate scope reduction with re-file hook.
 
 **Verdict:** ✅ Confirmed closed. PR: #725.
 

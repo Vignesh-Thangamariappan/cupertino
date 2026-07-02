@@ -12,7 +12,7 @@ cupertino search <query> --brief
 
 Default fan-out output prints each result's full chunk (often a multi-paragraph README, doc body, or code block). `--brief` collapses each chunk to its first ~12 non-blank lines with a `…` ellipsis. The per-result `▶ Read full: cupertino read <id> --source <name>` hint, the `See also` footer, and tips still print, so an LLM consumer can drill into any candidate without re-running search.
 
-Fan-out mode + text/markdown only. JSON output keeps full chunks for programmatic consumers (truncation is a presentation choice). ([#239](https://github.com/mihaelamj/cupertino/issues/239) follow-up)
+Fan-out mode + text/markdown only. JSON output keeps full chunks for programmatic consumers (truncation is a presentation choice). (#239 follow-up)
 
 ## Default
 

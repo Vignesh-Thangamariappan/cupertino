@@ -2,7 +2,7 @@ import Foundation
 @testable import MCPCore
 import Testing
 
-/// Regression suite for [#611](https://github.com/mihaelamj/cupertino/issues/611).
+/// Regression suite for #611.
 ///
 /// Pre-fix, `MCP.Core.ServerError.methodNotFound(String).message`
 /// returned `"MCP.Core.Protocols.Method not found: \(method)"` — the

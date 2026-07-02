@@ -2,7 +2,7 @@ import Foundation
 @testable import MCPCore
 import Testing
 
-// Regression suite for [#613](https://github.com/mihaelamj/cupertino/issues/613)
+// Regression suite for #613
 // item 3 — JSON-RPC notifications must NOT receive a response.
 //
 // JSON-RPC 2.0 §4.1: "A Notification is a Request object without an

@@ -5,7 +5,7 @@
 | **Status** | draft |
 | **Created** | 2026-06-20 |
 | **Last revised** | 2026-06-20 |
-| **Tracking issue** | [#1223](https://github.com/mihaelamj/cupertino/issues/1223) (declarative pluggability), parent [#919](https://github.com/mihaelamj/cupertino/issues/919) |
+| **Tracking issue** | #1223 (declarative pluggability), parent #919 |
 | **Target release** | release-after-next (not the next upcoming one) |
 | **Companion docs** | `docs/plans/2026-05-22-source-independence-day.md` (index-side plan), `docs/design/per-source-db-split.md`, `docs/design/cupertino-data-engine.md` |
 
@@ -241,7 +241,7 @@ RRF fusion is unchanged; only the input set becomes dynamic. The one subtlety: p
 - `docs/PRINCIPLES.md`: source-independence axiom (CLAUDE.md "Source Independence Day").
 
 ### Roadmap
-- [#1223](https://github.com/mihaelamj/cupertino/issues/1223): epic — declarative pluggability (parent of this design).
-- [#919](https://github.com/mihaelamj/cupertino/issues/919): epic — declarative source + DB pluggability.
-- [#1286](https://github.com/mihaelamj/cupertino/issues/1286): the serve fan-out fix that surfaced this (shipped).
-- [#935](https://github.com/mihaelamj/cupertino/issues/935): the end-to-end fake-source 2-file-PR proof (pattern reused for G1).
+- #1223: epic — declarative pluggability (parent of this design).
+- #919: epic — declarative source + DB pluggability.
+- #1286: the serve fan-out fix that surfaced this (shipped).
+- #935: the end-to-end fake-source 2-file-PR proof (pattern reused for G1).

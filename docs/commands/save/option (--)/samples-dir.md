@@ -10,7 +10,7 @@ cupertino save --source samples --samples-dir <path>
 
 ## Description
 
-Override the default `~/.cupertino/sample-code/` source location. The samples indexer expects extracted sample-code zips at this path. ([#231](https://github.com/mihaelamj/cupertino/issues/231))
+Override the default `~/.cupertino/sample-code/` source location. The samples indexer expects extracted sample-code zips at this path. (#231)
 
 ## Default
 

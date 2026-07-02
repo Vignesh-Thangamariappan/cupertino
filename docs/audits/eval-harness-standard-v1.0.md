@@ -1,6 +1,6 @@
 # Eval-harness standard v1.0
 
-**Filed**: 2026-05-23. **Status**: canonical. **Umbrella**: [#943](https://github.com/mihaelamj/cupertino/issues/943). **Infra**: [#949](https://github.com/mihaelamj/cupertino/issues/949).
+**Filed**: 2026-05-23. **Status**: canonical. **Umbrella**: #943. **Infra**: #949.
 
 This document is the contract every phase eval-harness script (`scripts/eval/search-quality-phase<N>.py`) follows. It describes the shared library (`scripts/eval/lib_harness.py`), the CLI flags every phase exposes, the JSON output schema, the paired-comparison audit-Markdown shape, and the CI smoke-mode hook.
 

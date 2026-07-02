@@ -1,6 +1,6 @@
 # Epic #893 closing audit, 2026-05-24
 
-Mechanical closing audit for [#893](https://github.com/mihaelamj/cupertino/issues/893) (producer-backend split epic). Per #907 acceptance criteria.
+Mechanical closing audit for #893 (producer-backend split epic). Per #907 acceptance criteria.
 
 This audit records the end-state evidence so #893 can close with a documented baseline. The audit is paired with `docs/plans/2026-05-12-v1-1-package-split.md`'s closing markers (sub-PR B of #907) and the epic-close comment on #893 itself (sub-PR C of #907).
 
@@ -138,10 +138,10 @@ Every #893 child issue is closed (verified via `gh issue list --search 'parent:8
 
 ## Cross-refs
 
-- Epic [#893](https://github.com/mihaelamj/cupertino/issues/893): producer-backend split.
+- Epic #893: producer-backend split.
 - Plan doc: `docs/plans/2026-05-12-v1-1-package-split.md` (closing markers landed in the same PR).
-- Pluggability epic [#919](https://github.com/mihaelamj/cupertino/issues/919): closed by PR #941 (#935 end-to-end TDD proof).
+- Pluggability epic #919: closed by PR #941 (#935 end-to-end TDD proof).
 - Search-arc lift-out trace: `docs/handoff/search-arc-liftout-2026-05-24.md`.
-- Canonical roadmap [#183](https://github.com/mihaelamj/cupertino/issues/183): v1.3.x section updated when this PR merges (sub-PR C).
+- Canonical roadmap #183: v1.3.x section updated when this PR merges (sub-PR C).
 - `mihaela-agents/Rules/swift/gof-di-rules.md` rules 5 + 8.
 - `mihaela-agents/Rules/swift/per-package-import-contract.md`.

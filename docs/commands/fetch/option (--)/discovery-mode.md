@@ -16,7 +16,7 @@ Controls the per-URL fetch strategy. Apple's docs serve both a JSON API and a WK
 
 | Value | Behaviour |
 |---|---|
-| `auto` | (default) JSON API primary, with two augmentation paths: WKWebView fallback when JSON 404s, plus HTML link augmentation on sparse-references pages (v1.0.2+, [#203](https://github.com/mihaelamj/cupertino/issues/203)) |
+| `auto` | (default) JSON API primary, with two augmentation paths: WKWebView fallback when JSON 404s, plus HTML link augmentation on sparse-references pages (v1.0.2+, #203) |
 | `json-only` | JSON only; skip both augmentation paths. Fastest, narrowest discovery |
 | `webview-only` | WKWebView for everything. Slowest, broadest discovery, matches pre-2025-11-30 behaviour |
 

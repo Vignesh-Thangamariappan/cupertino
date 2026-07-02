@@ -6,7 +6,7 @@ import SearchModels
 import SharedConstants
 import Testing
 
-/// Regression suite for [#640](https://github.com/mihaelamj/cupertino/issues/640).
+/// Regression suite for #640.
 ///
 /// Pre-fix, `Search.SmartQuery.answer` swallowed every per-fetcher
 /// error into an empty result set so one dead source couldn't take the

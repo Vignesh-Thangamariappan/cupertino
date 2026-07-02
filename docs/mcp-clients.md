@@ -54,7 +54,7 @@ command = "/opt/homebrew/bin/cupertino"  # Homebrew on Apple Silicon
 args = ["serve", "--no-reap"]
 ```
 
-> **Why `--no-reap`?** Codex spawns a fresh `cupertino serve` per tool call. Without `--no-reap`, each new instance kills its predecessor as a stale sibling, and the in-flight transport closes (`Transport closed` error on every tool call; see [#280](https://github.com/mihaelamj/cupertino/issues/280)). Claude Desktop / Cursor users keep the default (reap on) so MCP-host config reloads don't leak orphan servers.
+> **Why `--no-reap`?** Codex spawns a fresh `cupertino serve` per tool call. Without `--no-reap`, each new instance kills its predecessor as a stale sibling, and the in-flight transport closes (`Transport closed` error on every tool call; see #280). Claude Desktop / Cursor users keep the default (reap on) so MCP-host config reloads don't leak orphan servers.
 >
 > Equivalent env-var form: `CUPERTINO_DISABLE_REAPER=1` in `[mcp_servers.cupertino.env]`.
 

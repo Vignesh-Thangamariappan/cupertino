@@ -1,10 +1,10 @@
 # Source Independence Day: ordered execution plan
 
-**Filed**: 2026-05-22. **Status**: open, executing. **Umbrella**: [#919](https://github.com/mihaelamj/cupertino/issues/919). **Critical-path issues**: [#932](https://github.com/mihaelamj/cupertino/issues/932), [#933](https://github.com/mihaelamj/cupertino/issues/933), [#934](https://github.com/mihaelamj/cupertino/issues/934), [#935](https://github.com/mihaelamj/cupertino/issues/935).
+**Filed**: 2026-05-22. **Status**: open, executing. **Umbrella**: #919. **Critical-path issues**: #932, #933, #934, #935.
 
 ## What "Independence Day" means
 
-Adding a new content source (WWDC transcripts [#58](https://github.com/mihaelamj/cupertino/issues/58), Swift Forums [#89](https://github.com/mihaelamj/cupertino/issues/89), Tech Talks [#273](https://github.com/mihaelamj/cupertino/issues/273), or any future source) is a 2-file PR (a descriptor + an indexer concrete) with **zero edits to existing source concretes**, **zero edits to any static registry dictionary**, and **zero edits to any closed enum**.
+Adding a new content source (WWDC transcripts #58, Swift Forums #89, Tech Talks #273, or any future source) is a 2-file PR (a descriptor + an indexer concrete) with **zero edits to existing source concretes**, **zero edits to any static registry dictionary**, and **zero edits to any closed enum**.
 
 That is the load-bearing goal of #919. It is not "mostly pluggable with a few hardcoded edits left". The plan below names every remaining hardcoded edit-point and the step that removes it.
 
@@ -36,7 +36,7 @@ Plus downstream consumer polish (after the critical path lands):
 
 Each step is a separate PR with its own critic loop (2-iteration minimum per the post-#931 discipline). Each step's "removes edit-point" claim must be paired with a test that proves the edit-point can no longer reach the touched code.
 
-### Step 1 ([#932](https://github.com/mihaelamj/cupertino/issues/932)): `IndexerRegistry` composition-root injection
+### Step 1 (#932): `IndexerRegistry` composition-root injection
 
 **Removes edit-point #1.**
 
@@ -53,7 +53,7 @@ Each step is a separate PR with its own critic loop (2-iteration minimum per the
 
 **Unlock**: a new source's indexer concrete can live in its own package; SearchSQLite stops being an edit-point per source.
 
-### Step 2 ([#933](https://github.com/mihaelamj/cupertino/issues/933)): `Search.makeDefaultStrategies` factory dissolved
+### Step 2 (#933): `Search.makeDefaultStrategies` factory dissolved
 
 **Removes edit-point #2.**
 
@@ -70,7 +70,7 @@ Each step is a separate PR with its own critic loop (2-iteration minimum per the
 
 **Unlock**: a strategy lives next to its source's indexer (in the source's package), not centrally in `SearchStrategies`.
 
-### Step 3 ([#934](https://github.com/mihaelamj/cupertino/issues/934)): `Search.SourceRegistry.all` dissolved
+### Step 3 (#934): `Search.SourceRegistry.all` dissolved
 
 **Removes edit-point #3.**
 
@@ -89,7 +89,7 @@ Each step is a separate PR with its own critic loop (2-iteration minimum per the
 
 **Unlock**: descriptor list is no longer a hardcoded edit-point.
 
-### Step 4 ([#935](https://github.com/mihaelamj/cupertino/issues/935)): end-to-end TDD scenario
+### Step 4 (#935): end-to-end TDD scenario
 
 **Removes edit-point #4 (the empirical-proof gap).**
 

@@ -10,7 +10,7 @@ cupertino search <query> --skip-packages
 
 ## Description
 
-Excludes the `packages.db`-backed source from fan-out search. Useful when packages.db is missing/stale or when you want only docs + samples. ([#239](https://github.com/mihaelamj/cupertino/issues/239))
+Excludes the `packages.db`-backed source from fan-out search. Useful when packages.db is missing/stale or when you want only docs + samples. (#239)
 
 ## Default
 

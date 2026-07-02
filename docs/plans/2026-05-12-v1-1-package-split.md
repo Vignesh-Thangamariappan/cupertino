@@ -6,7 +6,7 @@ Status: **Closed 2026-05-24** by #907 (full closing audit + epic #893 close). Ea
 
 Companion documents:
 - `docs/research/pluggability-analysis-2026-05-22.md`: measured analysis of where cupertino sits against the strict-DI canon + the secret-life reference implementation, and the topology the refactor targets.
-- Epic [#893](https://github.com/mihaelamj/cupertino/issues/893): the canonical sequencing record for the producer-backend split (the v3 refactor). 13 child issues #895-#907 enumerate the per-arc PRs.
+- Epic #893: the canonical sequencing record for the producer-backend split (the v3 refactor). 13 child issues #895-#907 enumerate the per-arc PRs.
 - `mihaela-agents/Rules/swift/gof-di-rules.md` rules 5 + 8: the principle layer (every package lifts out; producer foundation-only target regime).
 - `mihaela-analytics/secret-life/Docs/protocol-seam-audit.md`: the reference implementation (4 protocol seams + 27 importer concretes + a 2026-05-20 lift-out trace).
 

@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#607](https://github.com/mihaelamj/cupertino/issues/607)
+/// Regression suite for #607
 /// read-side fallback half.
 ///
 /// PR #608 (indexer half) inlines `params.content` into the synthesised

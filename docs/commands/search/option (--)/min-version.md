@@ -10,7 +10,7 @@ cupertino search <query> --platform <platform> --min-version <version>
 
 ## Description
 
-Required when `--platform` is set. Lex compare in SQL; correct for all current Apple platforms (iOS 13+, macOS 11+, tvOS 13+, watchOS 6+, visionOS 1+). ([#220](https://github.com/mihaelamj/cupertino/issues/220))
+Required when `--platform` is set. Lex compare in SQL; correct for all current Apple platforms (iOS 13+, macOS 11+, tvOS 13+, watchOS 6+, visionOS 1+). (#220)
 
 ## Format
 

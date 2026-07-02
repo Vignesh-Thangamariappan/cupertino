@@ -3,7 +3,7 @@ import CoreProtocols
 import Foundation
 import Testing
 
-/// Regression suite for [#614](https://github.com/mihaelamj/cupertino/issues/614).
+/// Regression suite for #614.
 ///
 /// Pre-fix, `MarkdownToStructuredPage.extractKind` first-matched the
 /// `"<kind># <name>"` line pattern. Pages whose markdown rendered

@@ -10,7 +10,7 @@ cupertino search <query> --platform <platform> --min-version <version>
 
 ## Description
 
-In fan-out mode, restricts results to those whose declared deployment target is compatible with the named platform. Requires `--min-version` (both must be set together; one without the other errors out). ([#220](https://github.com/mihaelamj/cupertino/issues/220), [#233](https://github.com/mihaelamj/cupertino/issues/233))
+In fan-out mode, restricts results to those whose declared deployment target is compatible with the named platform. Requires `--min-version` (both must be set together; one without the other errors out). (#220, #233)
 
 ## Values
 

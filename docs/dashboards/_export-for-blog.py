@@ -13,7 +13,7 @@ Usage:
 
 Defaults:
     --out      ./search-quality-v1.2.0-blog-embed.html
-    --gh-base  https://github.com/mihaelamj/cupertino/blob/main/docs
+    --gh-base  https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/docs
 
 The output is a fully self-contained HTML page. Drop it into a blog editor's
 "Custom HTML" / "Raw HTML" / "HTML block" mode. The dashboard's internal
@@ -37,7 +37,7 @@ def main() -> int:
                              "to embed a design doc instead of the index dashboard.")
     parser.add_argument("--out", type=Path, default=None,
                         help="Output path (default: <source-stem>-blog-embed.html next to this script)")
-    parser.add_argument("--gh-base", default="https://github.com/mihaelamj/cupertino/blob/main/docs",
+    parser.add_argument("--gh-base", default="https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/docs",
                         help="GitHub URL prefix for rewriting relative links")
     parser.add_argument("--gh-pages-base", default=None,
                         help="Optional GitHub Pages URL prefix for sibling dashboards (.html); defaults to --gh-base if omitted")

@@ -85,10 +85,10 @@
             </p>
             <p class="callout-links">
                 Related issues:
-                <a href="https://github.com/mihaelamj/cupertino/issues/818">#818 acronym routing</a>
-                <a href="https://github.com/mihaelamj/cupertino/issues/819">#819 attribute filters</a>
-                <a href="https://github.com/mihaelamj/cupertino/issues/820">#820 design-vocab intent</a>
-                <a href="https://github.com/mihaelamj/cupertino/issues/821">#821 prose profile</a>
+                <a href="#818">#818 acronym routing</a>
+                <a href="#819">#819 attribute filters</a>
+                <a href="#820">#820 design-vocab intent</a>
+                <a href="#821">#821 prose profile</a>
             </p>
         </div>
         </div>
@@ -314,13 +314,13 @@
                 <p>For each test I run a fixed list of queries against cupertino, capture the top-10 results, score them against pre-defined right-answer patterns, and report the headline number plus a per-query breakdown. No anecdotes; everything is reproducible.</p>
 
                 <div class="grid cols-2">
-                    <a class="card step-card" href="https://github.com/mihaelamj/cupertino/blob/main/scripts/eval/search-quality-phase1.py#L74-L133">
+                    <a class="card step-card" href="https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/scripts/eval/search-quality-phase1.py#L74-L133">
                         <div class="card-icon tint-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
                         <h3 class="card-title">Step 1 · A query corpus</h3>
                         <p class="card-finding">~30-50 queries per test, hand-curated to cover breadth (types, protocols, methods, framework concepts). Each query carries a right-answer pattern.</p>
                         <span class="card-link">View corpus source on GitHub →</span>
                     </a>
-                    <a class="card step-card" href="https://github.com/mihaelamj/cupertino/blob/main/scripts/eval/search-quality-phase1.py">
+                    <a class="card step-card" href="https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/scripts/eval/search-quality-phase1.py">
                         <div class="card-icon tint-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
                         <h3 class="card-title">Step 2 · Run the binary</h3>
                         <p class="card-finding">A Python harness invokes <code>cupertino search</code> via subprocess for each query, extracts the top-10 URIs from stdout. Read-only against the database.</p>
@@ -332,7 +332,7 @@
                         <p class="card-finding">Per-query MRR / P@k / NDCG / per-class custom metric. Auto-extracted, no human in the loop for Phase 1.</p>
                         <span class="card-link">Read methodology →</span>
                     </a>
-                    <a class="card step-card" href="https://github.com/mihaelamj/cupertino/tree/main/docs/audits">
+                    <a class="card step-card" href="https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/docs/audits">
                         <div class="card-icon tint-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
                         <h3 class="card-title">Step 4 · Report</h3>
                         <p class="card-finding">Markdown audit at <code>docs/audits/</code>, JSON raw data at <code>/tmp/</code>, this dashboard auto-derived from the markdown. Future ranking changes pair against the baseline using Wilcoxon / McNemar significance tests.</p>

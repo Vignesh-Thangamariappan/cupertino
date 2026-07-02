@@ -12,7 +12,7 @@ cupertino doctor --freshness
 
 Answers "how stale is my local index?" for users without git-level access to the raw corpus repo (which would otherwise let them `git log` that repo to see when Apple's pages last changed). Reads `docs_metadata.last_crawled` (Unix epoch seconds, stamped at indexer save time) and reports per-source quantiles + row count.
 
-Per the [#275](https://github.com/mihaelamj/cupertino/issues/275) design discussion, this flag emits the distribution (oldest / p50 / p90 / newest) rather than a single snapshot timestamp: a long crawl can span days, so a single "bundle was built at X" hides per-page age. p50 + p90 surfaces both typical age and the long-tail.
+Per the #275 design discussion, this flag emits the distribution (oldest / p50 / p90 / newest) rather than a single snapshot timestamp: a long crawl can span days, so a single "bundle was built at X" hides per-page age. p50 + p90 surfaces both typical age and the long-tail.
 
 ## Default
 
@@ -65,11 +65,11 @@ Quantile rule: nearest-rank (no interpolation), `p50` and `p90` are always real 
 - **Doesn't gate the doctor verdict**, purely informational signal.
 - Skipped silently when the apple-docs database is missing or schema-mismatched (the regular per-source health check already surfaced that).
 - Rows where `last_crawled == 0` (never stamped) are excluded from the quantile computation so they don't pull the oldest down to epoch 0.
-- **No thresholds**, raw ages only. Per [#275](https://github.com/mihaelamj/cupertino/issues/275)'s design discussion, "fresh / aging / stale" labels are deferred so users can set their own thresholds (a v1.2 bundle may be perfectly current for one user and ancient for another, depending on how often they reset).
+- **No thresholds**, raw ages only. Per #275's design discussion, "fresh / aging / stale" labels are deferred so users can set their own thresholds (a v1.2 bundle may be perfectly current for one user and ancient for another, depending on how often they reset).
 
 ## See also
 
-- [#275](https://github.com/mihaelamj/cupertino/issues/275), issue tracking the freshness/drift surface
-- [#78](https://github.com/mihaelamj/cupertino/issues/78), parent ticket (`cupertino stats` content inventory)
+- #275, issue tracking the freshness/drift surface
+- #78, parent ticket (`cupertino stats` content inventory)
 - `--kind-coverage`, sibling informational flag (kind distribution audit)
 - `--save`, different doctor surface (maintenance health check)

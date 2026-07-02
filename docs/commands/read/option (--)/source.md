@@ -10,7 +10,7 @@ cupertino read <identifier> --source <name>
 
 ## Description
 
-`cupertino read` dispatches across docs / samples / packages by inferring from identifier shape (URI scheme -> docs; otherwise tries samples then packages). When the auto-inference can't tell sample-file paths from package paths apart, `--source` resolves it. `cupertino search` always emits `--source` in its `Read full:` hint, so the command is unambiguous when copied verbatim ([#239](https://github.com/mihaelamj/cupertino/issues/239) follow-up).
+`cupertino read` dispatches across docs / samples / packages by inferring from identifier shape (URI scheme -> docs; otherwise tries samples then packages). When the auto-inference can't tell sample-file paths from package paths apart, `--source` resolves it. `cupertino search` always emits `--source` in its `Read full:` hint, so the command is unambiguous when copied verbatim (#239 follow-up).
 
 Post-#1037 each docs source owns its own SQLite file; `--source` ALSO drives the per-source DB lookup for non-URI identifiers (e.g. `cupertino read some-slug --source hig` opens `hig.db`). For URI identifiers the scheme is the canonical disambiguator; passing `--source` with a URI is allowed only when both agree.
 

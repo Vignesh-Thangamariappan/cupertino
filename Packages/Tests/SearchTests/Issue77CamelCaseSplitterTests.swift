@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#77](https://github.com/mihaelamj/cupertino/issues/77).
+/// Regression suite for #77.
 ///
 /// FTS5's default `unicode61` tokeniser treats CamelCase identifiers as
 /// opaque units, so `search("grid")` doesn't match the `LazyVGrid`

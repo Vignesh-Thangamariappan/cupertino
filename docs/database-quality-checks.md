@@ -12,7 +12,7 @@ A re-crawl + rebuild of `hig.db` looked perfectly healthy:
 - `PRAGMA integrity_check` = **ok**.
 - schema = **18** (matches binary).
 
-Yet the shipped v1.3.0 `hig.db` held **346 rows, of which 173 were `…-appledeveloperdocumentation` placeholder duplicates** — the "Apple Developer Documentation" JS-disabled stub pages the [#284](https://github.com/mihaelamj/cupertino/issues/284) js-fallback filter exists to reject. They sat in `docs_structured` (inflating `list-frameworks` counts) while never entering `docs_fts` — so search never returned them, which is exactly why the rot went unnoticed for releases.
+Yet the shipped v1.3.0 `hig.db` held **346 rows, of which 173 were `…-appledeveloperdocumentation` placeholder duplicates** — the "Apple Developer Documentation" JS-disabled stub pages the #284 js-fallback filter exists to reject. They sat in `docs_structured` (inflating `list-frameworks` counts) while never entering `docs_fts` — so search never returned them, which is exactly why the rot went unnoticed for releases.
 
 The re-crawl exposed **two compounding bugs** that let junk persist across a rebuild:
 
@@ -93,4 +93,4 @@ What does **not** indicate rot (verified benign 2026-06-21): all-empty `abstract
 
 - `docs/database-handbook.md` — canonical index for all database docs.
 - `docs/PRINCIPLES.md` — "garbage filtered at input", "no content lost at the door".
-- [#284](https://github.com/mihaelamj/cupertino/issues/284) — the js-fallback placeholder-rejection filter these placeholders evade when they reach `docs_structured` by another path.
+- #284 — the js-fallback placeholder-rejection filter these placeholders evade when they reach `docs_structured` by another path.

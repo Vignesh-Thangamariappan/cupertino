@@ -1,19 +1,19 @@
 {
-  "originHash" : "95739b62ca0adfb2410158c0a5f3c43312c7cebfd5d25fca23828e1b4dcdff15",
+  "originHash" : "0b18465bb577537871ca69197ff3894cfa03889d88b55a9a831fcb9953dd1654",
   "pins" : [
     {
       "identity" : "cupertinodataengine",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihaelamj/CupertinoDataEngine.git",
+      "location" : "https://codeberg.org/CupertinoHQ/CupertinoDataEngine.git",
       "state" : {
-        "revision" : "785dcf6e0fdbaf908abd7de890308fd9f75b7fc6",
-        "version" : "0.2.8"
+        "revision" : "cb1948cfafc2569b2f3a9ae7a940fdae75afdc2d",
+        "version" : "0.2.11"
       }
     },
     {
       "identity" : "cupertinodatakit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihaelamj/CupertinoDataKit.git",
+      "location" : "https://codeberg.org/CupertinoHQ/CupertinoDataKit.git",
       "state" : {
         "revision" : "8cf995507467d353387e506005f962b606eea207",
         "version" : "0.3.0"
@@ -40,16 +40,16 @@
     {
       "identity" : "swiftmcpclient",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihaelamj/SwiftMCPClient.git",
+      "location" : "https://codeberg.org/Mihaela/SwiftMCPClient.git",
       "state" : {
-        "revision" : "d049156ded908b5c30abd771c7e92cbd6f461a11",
-        "version" : "0.1.0"
+        "revision" : "fc4b3419f1bf4c8103a03ed92696925174815f6f",
+        "version" : "0.1.1"
       }
     },
     {
       "identity" : "swiftmcpcore",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihaelamj/SwiftMCPCore.git",
+      "location" : "https://codeberg.org/Mihaela/SwiftMCPCore.git",
       "state" : {
         "revision" : "12e02eb7fd3c484f366c7389e5530c8185bf2b77",
         "version" : "0.1.0"
@@ -58,7 +58,7 @@
     {
       "identity" : "swiftmcpserver",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mihaelamj/SwiftMCPServer.git",
+      "location" : "https://codeberg.org/Mihaela/SwiftMCPServer.git",
       "state" : {
         "revision" : "bd13e4932c14066c2462ec8947237ec54e29af8d",
         "version" : "0.1.0"

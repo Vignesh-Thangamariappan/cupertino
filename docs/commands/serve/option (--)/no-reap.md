@@ -72,5 +72,5 @@ CUPERTINO_DISABLE_REAPER = "1"
 
 ## Related
 
-- [#280](https://github.com/mihaelamj/cupertino/issues/280), the bug report that produced this flag.
-- [#242](https://github.com/mihaelamj/cupertino/issues/242), original `ServeReaper` motivation (Claude Desktop / Cursor orphan cleanup).
+- #280, the bug report that produced this flag.
+- #242, original `ServeReaper` motivation (Claude Desktop / Cursor orphan cleanup).

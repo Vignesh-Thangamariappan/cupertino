@@ -13,11 +13,11 @@
       "version": "1.0.0",
       "author": {
         "name": "mihaelamj",
-        "url": "https://github.com/mihaelamj"
+        "url": "https://aleahim.com"
       },
       "source": "./",
       "category": "development",
-      "homepage": "https://github.com/mihaelamj/cupertino"
+      "homepage": "https://codeberg.org/CupertinoHQ/cupertino"
     }
   ]
 }

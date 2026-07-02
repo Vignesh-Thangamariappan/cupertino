@@ -14,7 +14,7 @@ cupertino fetch --source packages --skip-archives --annotate-availability  # ann
 
 ## Description
 
-Runs up to three stages. Post-[#1108](https://github.com/mihaelamj/cupertino/issues/1108):
+Runs up to three stages. Post-#1108:
 
 - **Stage 1** (metadata refresh) is **opt-in** via `--refresh-metadata`. Its output is consumed only by the TUI's stars-sort view.
 - **Stage 2** (archive download) is the default. It produces the on-disk corpus consumed by `cupertino save --source packages`.
@@ -28,7 +28,7 @@ Pulls the full Swift Package Index listing (~10,995 packages) and decorates each
 
 Reads the priority-packages list (`PriorityPackagesCatalog`), resolves the transitive dependency closure of each seed via `Package.swift` (and `Package.resolved` as fallback for apps), then downloads + extracts a tarball per package via `PackageArchiveExtractor`. The extractor pulls `https://codeload.github.com/<owner>/<repo>/tar.gz/<ref>` (HEAD → main → master fallback) and keeps a filtered subset: `README*`, `CHANGELOG*`, `LICENSE*`, `Package.swift`, all of `Sources/` + `Tests/`, every `.docc` article and tutorial, plus `Examples/` / `Demo/` directories. Each package gets a `manifest.json`. Anonymous codeload (no `GITHUB_TOKEN` needed) typically completes the 135-archive closure in ~100 seconds.
 
-### Stage 3, Availability annotation ([#219](https://github.com/mihaelamj/cupertino/issues/219), opt-in via `--annotate-availability`)
+### Stage 3, Availability annotation (#219, opt-in via `--annotate-availability`)
 
 Walks every `<owner>/<repo>/` subdir on disk and writes a per-package `availability.json` next to `manifest.json`. Captures:
 

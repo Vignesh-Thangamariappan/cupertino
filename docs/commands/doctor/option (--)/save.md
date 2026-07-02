@@ -14,7 +14,7 @@ Adds the `cupertino save` maintenance sections to the regular doctor output. The
 
 - 📂 Raw corpus directories (the inputs `cupertino save` would consume)
 - 📦 Swift Packages: user selection state + downloaded README counts + orphan / missing tallies
-- 🔍 `cupertino save` per-source preflight summary: which sources are present, sidecar coverage, annotation status (backed by `Indexer.Preflight.preflightLines(...)`, lifted in [#244](https://github.com/mihaelamj/cupertino/issues/244))
+- 🔍 `cupertino save` per-source preflight summary: which sources are present, sidecar coverage, annotation status (backed by `Indexer.Preflight.preflightLines(...)`, lifted in #244)
 
 Use this before `cupertino save` to confirm sources + selections are ready, or after `cupertino fetch` to verify the corpus dirs look right. Read-only, no DB writes.
 
@@ -22,7 +22,7 @@ Use this before `cupertino save` to confirm sources + selections are ready, or a
 
 `false` (default doctor output is DB + MCP only; corpus + selection state is hidden)
 
-## Background ([#68](https://github.com/mihaelamj/cupertino/issues/68))
+## Background (#68)
 
 Pre-#68 the default doctor output included raw corpus directory walks + package selection state. That made sense for maintainers running `cupertino fetch` + `cupertino save`, but users who ran `cupertino setup` (which downloads pre-built DBs and never populates `docs/`) saw a `0 files` line under "Apple docs" and thought their install was broken. It wasn't: `setup` users have databases, which is what the runtime actually needs.
 

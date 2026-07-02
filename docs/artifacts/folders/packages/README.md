@@ -1,6 +1,6 @@
 # packages/ - Swift Package Documentation
 
-Swift package metadata from the Swift Package Index + GitHub, plus extracted source archives for the priority-package set. Both produced by `cupertino fetch --source packages` after the [#217](https://github.com/mihaelamj/cupertino/issues/217) merge.
+Swift package metadata from the Swift Package Index + GitHub, plus extracted source archives for the priority-package set. Both produced by `cupertino fetch --source packages` after the #217 merge.
 
 ## Location
 

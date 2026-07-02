@@ -25,9 +25,9 @@ set -euo pipefail
 
 ROOT="${1:-$(git rev-parse --show-toplevel 2>/dev/null || echo .)}"
 
-# The ONLY owners cupertino pulls dependencies from. A URL pointing anywhere else
-# (a personal fork, a typosquat, a mirror) is rejected.
-ALLOWED_OWNERS="apple swiftlang mihaelamj"
+# The ONLY host/owner pairs cupertino pulls dependencies from. A URL pointing
+# anywhere else (a personal fork, a typosquat, a mirror) is rejected.
+ALLOWED_OWNERS="github.com/apple github.com/swiftlang codeberg.org/mihaela codeberg.org/cupertinohq"
 
 MANIFEST="$ROOT/Packages/Package.swift"
 PKG_LOCK="$ROOT/Packages/Package.resolved"
@@ -37,10 +37,11 @@ fail=0
 note() { printf '   %s\n' "$1"; }
 
 owner_allowed() {
-  # $1 = a github URL. Returns 0 if the owner segment is allowlisted (case-insensitive,
-  # so KartavyaDikshit / Apple-lookalikes cannot slip past on casing).
+  # $1 = a dependency URL. Returns 0 if the host/owner pair is allowlisted
+  # (case-insensitive, so KartavyaDikshit / Apple-lookalikes cannot slip past on
+  # casing, and a lookalike owner on a different host cannot slip past either).
   local owner
-  owner=$(printf '%s' "$1" | sed -E 's#^https?://github\.com/([^/]+)/.*#\1#' | tr '[:upper:]' '[:lower:]')
+  owner=$(printf '%s' "$1" | sed -E 's#^https?://([^/]+)/([^/]+)/.*#\1/\2#' | tr '[:upper:]' '[:lower:]')
   local a
   for a in $ALLOWED_OWNERS; do [ "$owner" = "$a" ] && return 0; done
   return 1

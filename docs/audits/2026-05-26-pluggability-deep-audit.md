@@ -2,9 +2,9 @@
 
 ## Frame
 
-Per [#919](https://github.com/mihaelamj/cupertino/issues/919) / Source Independence Day: adding a new content source (or DB) must be a strictly 2-file PR (provider descriptor + indexer concrete) with zero edits to existing concretes, registries, switches, or static literals.
+Per #919 / Source Independence Day: adding a new content source (or DB) must be a strictly 2-file PR (provider descriptor + indexer concrete) with zero edits to existing concretes, registries, switches, or static literals.
 
-Prior audit batches 1–10 closed [#1045](https://github.com/mihaelamj/cupertino/issues/1045)'s 4 Gaps for the search-side wiring (SmartQuery weights, footer availableSources, DocKind dict, DocsIndexing directoryByKey). This audit is the layer-by-layer follow-up after that ship, searching for *remaining* 80% holes.
+Prior audit batches 1–10 closed #1045's 4 Gaps for the search-side wiring (SmartQuery weights, footer availableSources, DocKind dict, DocsIndexing directoryByKey). This audit is the layer-by-layer follow-up after that ship, searching for *remaining* 80% holes.
 
 Method: 8-layer top-down audit. Each layer asks "does adding a new source require touching this code?". If yes, that's a finding.
 

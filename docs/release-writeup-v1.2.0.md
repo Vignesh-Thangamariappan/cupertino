@@ -3,7 +3,7 @@
 **Date:** 2026-05-21
 **Companion to:** [cupertino search-quality dashboard](../search-quality-v1.2.0.html)
 **Methodology design:** [search-quality-eval](design-search-quality-eval.html)
-**Audit folder:** [`docs/audits/`](https://github.com/mihaelamj/cupertino/tree/main/docs/audits)
+**Audit folder:** [`docs/audits/`](https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/docs/audits)
 
 This page is the long-form companion to the search-quality dashboard. The dashboard tells you *what changed* in three KPI tiles. This page tells you *how it changed*, *why the numbers moved*, and *what it means for AI coding agents using the cupertino MCP server*.
 
@@ -45,9 +45,9 @@ Each of those is documented in its own design doc; this page summarises the user
 
 Three query classes are below threshold on the absolute baselines:
 
-- **Prose / conceptual queries** — multi-word natural-language queries like *"how do I make a type usable as a dictionary key in Swift 6"*. P@1 = 26.7%. Cupertino's BM25F gives `content` weight 1.0 (low, by design, so canonical-lookup queries don't get drowned out). That trade-off costs us prose recall. Issue [#821](https://github.com/mihaelamj/cupertino/issues/821) (alternate BM25F weight vector triggered by an intent classifier) is the candidate fix.
-- **Acronym / synonym recall** — queries like `wlan` (CoreWLAN), `mpsgraph` (MetalPerformanceShadersGraph). P@1 = 18.2%. The `framework_aliases.synonyms` table has the data; the default search path doesn't consult it. Issue [#818](https://github.com/mihaelamj/cupertino/issues/818) routes the query through the alias table when the raw query is a known synonym.
-- **Symbol-attribute queries** — queries that describe symbols by attribute (`@MainActor` types, `@Observable` classes) or by signature. Mean P@5 = 0.25. The `doc_symbols.attributes` column is FTS-indexed but the default search path doesn't filter on it. Issue [#819](https://github.com/mihaelamj/cupertino/issues/819) wires that into the candidate fetcher.
+- **Prose / conceptual queries** — multi-word natural-language queries like *"how do I make a type usable as a dictionary key in Swift 6"*. P@1 = 26.7%. Cupertino's BM25F gives `content` weight 1.0 (low, by design, so canonical-lookup queries don't get drowned out). That trade-off costs us prose recall. Issue #821 (alternate BM25F weight vector triggered by an intent classifier) is the candidate fix.
+- **Acronym / synonym recall** — queries like `wlan` (CoreWLAN), `mpsgraph` (MetalPerformanceShadersGraph). P@1 = 18.2%. The `framework_aliases.synonyms` table has the data; the default search path doesn't consult it. Issue #818 routes the query through the alias table when the raw query is a known synonym.
+- **Symbol-attribute queries** — queries that describe symbols by attribute (`@MainActor` types, `@Observable` classes) or by signature. Mean P@5 = 0.25. The `doc_symbols.attributes` column is FTS-indexed but the default search path doesn't filter on it. Issue #819 wires that into the candidate fetcher.
 
 **None of these is a v1.1.0 / v1.0.2 regression.** They're standing weaknesses in cupertino's ranker that pre-date v1.2.0 and need a separate ranking change to close. v1.3+ targets them in priority order.
 
@@ -61,7 +61,7 @@ Two independent corpora cross-validate the result on the canonical lookup axis (
 
 Reproducibility check: running the harness twice against the same `(binary, db)` pair produces byte-identical per-query rank values across all 50 queries × both arms. The harness is deterministic; no randomisation; no human-in-the-loop scoring (Phase 1 is fully automated).
 
-Harness: [`scripts/eval/search-quality-phase1.py`](https://github.com/mihaelamj/cupertino/blob/main/scripts/eval/search-quality-phase1.py) and its multi-corpus sibling [`scripts/eval/search-quality-phase1-extended.py`](https://github.com/mihaelamj/cupertino/blob/main/scripts/eval/search-quality-phase1-extended.py).
+Harness: [`scripts/eval/search-quality-phase1.py`](https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/scripts/eval/search-quality-phase1.py) and its multi-corpus sibling [`scripts/eval/search-quality-phase1-extended.py`](https://codeberg.org/CupertinoHQ/cupertino/src/branch/main/scripts/eval/search-quality-phase1-extended.py).
 
 ---
 

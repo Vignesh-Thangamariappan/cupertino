@@ -7,7 +7,7 @@ import SQLite3
 import Testing
 
 // Test suite for the iter-2 hierarchy walk introduced by
-// [#759](https://github.com/mihaelamj/cupertino/issues/759). Covers the
+// #759. Covers the
 // four surfaces that shipped in PR #760 with only `parentURI(of:)`
 // unit-tested:
 //

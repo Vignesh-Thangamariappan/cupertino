@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#635](https://github.com/mihaelamj/cupertino/issues/635).
+/// Regression suite for #635.
 ///
 /// Before this PR, `Search.Index.setSchemaVersion()` wrote
 /// `PRAGMA user_version = <constant>` whenever the on-disk value

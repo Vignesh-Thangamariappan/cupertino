@@ -362,8 +362,8 @@ struct PriorityPackagesMergeTests {
               "count": 3,
               "packages": [
                 { "owner": "vapor", "repo": "vapor", "url": "https://github.com/vapor/vapor" },
-                { "owner": "mihaelamj", "repo": "BearerTokenAuthMiddleware", "url": "https://github.com/mihaelamj/BearerTokenAuthMiddleware" },
-                { "owner": "mihaelamj", "repo": "OpenAPILoggingMiddleware", "url": "https://github.com/mihaelamj/OpenAPILoggingMiddleware" }
+                { "owner": "Mihaela", "repo": "BearerTokenAuthMiddleware", "url": "https://codeberg.org/Mihaela/BearerTokenAuthMiddleware" },
+                { "owner": "Mihaela", "repo": "OpenAPILoggingMiddleware", "url": "https://codeberg.org/Mihaela/OpenAPILoggingMiddleware" }
               ]
             }
           },

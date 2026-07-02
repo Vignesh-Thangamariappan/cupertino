@@ -6,7 +6,7 @@ import SearchModels
 import SQLite3
 import Testing
 
-/// Regression suite for [#1132](https://github.com/mihaelamj/cupertino/issues/1132).
+/// Regression suite for #1132.
 ///
 /// `updateFrameworkSynonyms` used to be `UPDATE framework_aliases SET synonyms
 /// = ? WHERE identifier = ?`, which silently no-opped whenever the alias row

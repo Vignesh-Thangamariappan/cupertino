@@ -13,7 +13,7 @@ cupertino-constraints-gen conformances --from-directory <dir> -o <output>
 
 ## Description
 
-`cupertino-constraints-gen` is a standalone maintainer tool (a separate binary from `cupertino`). It parses `swift symbolgraph-extract` JSON and emits the filtered constraint table consumed by the indexer's iteration-3 static-constraints enrichment pass ([#759](https://github.com/mihaelamj/cupertino/issues/759)). That table is the single Apple-wide source of truth the apple-docs, samples, and packages constraint passes all read; it is regenerated when Apple ships a new SDK.
+`cupertino-constraints-gen` is a standalone maintainer tool (a separate binary from `cupertino`). It parses `swift symbolgraph-extract` JSON and emits the filtered constraint table consumed by the indexer's iteration-3 static-constraints enrichment pass (#759). That table is the single Apple-wide source of truth the apple-docs, samples, and packages constraint passes all read; it is regenerated when Apple ships a new SDK.
 
 DocC markdown spells out only a fraction of Apple's generic constraints; the symbol graphs cover the full API surface. That is why the table is symbolgraph-derived, not scraped from the docs.
 
