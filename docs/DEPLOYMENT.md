@@ -15,7 +15,8 @@ This guide covers the complete release process for Cupertino.
 2. [Automated Release (Recommended)](#automated-release-recommended)
 3. [Manual Release Workflow](#manual-release-workflow)
 4. [Installation Methods](#installation-methods)
-5. [Troubleshooting](#troubleshooting)
+5. [Database Asset Hosting](#database-asset-hosting-cupertino-assets)
+6. [Troubleshooting](#troubleshooting)
 
 ---
 
