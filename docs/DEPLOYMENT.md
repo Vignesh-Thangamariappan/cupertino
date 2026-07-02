@@ -277,9 +277,42 @@ cupertino setup
 
 | Repository | Purpose |
 |------------|---------|
-| [mihaelamj/cupertino](https://codeberg.org/CupertinoHQ/cupertino) | Main CLI source code |
-| mihaelamj/cupertino-docs | Pre-built per-source databases bundle |
-| [mihaelamj/homebrew-tap](https://codeberg.org/CupertinoHQ/homebrew-tap) | Homebrew formula |
+| [CupertinoHQ/cupertino](https://codeberg.org/CupertinoHQ/cupertino) | Main CLI source code |
+| cupertino-assets (Fly.io app) | Pre-built per-source databases bundle + constraints sidecar (see Database Asset Hosting below) |
+| [CupertinoHQ/homebrew-tap](https://codeberg.org/CupertinoHQ/homebrew-tap) | Homebrew formula |
+
+---
+
+## Database Asset Hosting (cupertino-assets)
+
+Since v1.4.2 the database bundle and constraints sidecar that `cupertino setup`
+downloads are served by **`cupertino-assets`**, a static Caddy file server on
+Fly.io. This replaced the GitHub-release URLs that 404'd when the GitHub account
+was locked (2026-06-30).
+
+- Bundle: `https://cupertino-assets.fly.dev/releases/v<version>/cupertino-databases-v<version>.zip`
+- Sidecar: `https://cupertino-assets.fly.dev/apple-constraints.json`
+- Binary-side constants: `Shared.Constants.docsReleaseBaseURL` and `appleConstraintsURL`
+
+**How it works:** there is no volume, bucket, or CDN. The payloads are baked into
+the Docker image (`FROM caddy:2-alpine; COPY public /srv`) and Fly runs it as a
+single 512MB machine in `fra`. `/releases/*` is served with
+`Cache-Control: immutable` (1 year); the sidecar is cached 1 hour.
+
+**Releasing a new database bundle:**
+
+1. Place the new zip at `cupertino-assets/public/releases/v<version>/cupertino-databases-v<version>.zip`
+   (the `<version>` must match the binary's `databaseVersion`).
+2. Keep every previous `releases/v*` folder; older installed binaries still
+   download their own version.
+3. Update `public/apple-constraints.json` if the sidecar changed (fixed path).
+4. `fly deploy -a cupertino-assets`, then verify with `curl -I` on both URLs and
+   an end-to-end `cupertino setup` from a client machine.
+
+**Rules:** never overwrite an existing `releases/v*` path with different bytes
+(immutable cache); new bytes always get a new version folder. The payloads are
+gitignored (too large); the app config and full runbook live in the
+`cupertino-assets/` folder README next to this repo's checkout.
 
 ---
 
